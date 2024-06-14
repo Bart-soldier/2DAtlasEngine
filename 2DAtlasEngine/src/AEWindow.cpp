@@ -1,0 +1,38 @@
+#include "../inc/AEWindow.hpp"
+
+namespace AE {
+
+	AEWindow::AEWindow(int width, int height, std::string name) : _width{ width }, _height{ height }, _name{ name } {
+		InitializeWindow();
+	}
+
+	AEWindow::~AEWindow() {
+		SDL_DestroyWindow(window);
+	}
+
+	bool AEWindow::shouldClose(SDL_Event* event) {
+		return event->type == SDL_QUIT ? true : false;
+	}
+
+	void AEWindow::InitializeWindow() {
+		if (SDL_Init(SDL_INIT_VIDEO) < 0)
+		{
+			printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+		}
+		else
+		{
+			window = SDL_CreateWindow(_name.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, _width, _height, SDL_WINDOW_SHOWN);
+			if (window == NULL)
+			{
+				printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
+			}
+			else
+			{
+				screenSurface = SDL_GetWindowSurface(window);
+				SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xFF, 0xFF));
+				SDL_UpdateWindowSurface(window);
+			}
+		}
+	}
+
+}
