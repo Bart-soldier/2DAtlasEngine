@@ -16,5 +16,7 @@ int main(int argc, char* args[])
 		return EXIT_FAILURE;
 	}
 
+	_application.shutdown();
+
 	return EXIT_SUCCESS;
 }

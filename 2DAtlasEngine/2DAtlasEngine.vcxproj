@@ -27,6 +27,9 @@
     <ClInclude Include="inc\AEWindow.hpp" />
     <ClInclude Include="inc\Application.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="rsc\hello_world.bmp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

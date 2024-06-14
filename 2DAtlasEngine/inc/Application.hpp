@@ -11,6 +11,7 @@ namespace AE {
 		static constexpr int HEIGHT = 600;
 
 		void run();
+		void shutdown();
 
 	private:
 		AEWindow _AEWindow{ WIDTH, HEIGHT, "Atlas Engine 2.0" };
