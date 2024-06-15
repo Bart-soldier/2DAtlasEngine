@@ -14,14 +14,16 @@ namespace AE {
 		AEWindow(const AEWindow&) = delete;
 		AEWindow& operator=(const AEWindow&) = delete;
 
-		bool shouldClose(SDL_Event* event);
-		bool LoadImage();
-		void DisplayImage();
+		bool _shouldClose;
+
+		SDL_Surface* LoadSurface(std::string path);
+		bool DrawSurface(SDL_Surface* surface);
+		void SwapBuffers();
 
 	private:
 		SDL_Window* _window;
-		SDL_Surface* _screenSurface;
-		SDL_Surface* _image;
+		SDL_Surface* _frontBuffer;
+		SDL_Surface* _backBuffer;
 		std::string _name;
 		const int _width;
 		const int _height;

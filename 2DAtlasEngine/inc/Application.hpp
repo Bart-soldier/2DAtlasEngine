@@ -6,14 +6,29 @@ namespace AE {
 
 	class Application {
 
-	public:
-		static constexpr int WIDTH = 800;
-		static constexpr int HEIGHT = 600;
+		enum KeyPressSurfaces
+		{
+			KEY_PRESS_SURFACE_DEFAULT,
+			KEY_PRESS_SURFACE_UP,
+			KEY_PRESS_SURFACE_DOWN,
+			KEY_PRESS_SURFACE_LEFT,
+			KEY_PRESS_SURFACE_RIGHT,
+			KEY_PRESS_SURFACE_TOTAL
+		};
 
-		void run();
-		void shutdown();
+		public:
+			static constexpr int WIDTH = 800;
+			static constexpr int HEIGHT = 600;
 
-	private:
-		AEWindow _AEWindow{ WIDTH, HEIGHT, "Atlas Engine 2.0" };
+			void Run();
+			void Shutdown();
+
+		private:
+			AEWindow _AEWindow{ WIDTH, HEIGHT, "Atlas Engine 2.0" };
+
+			void HandleEvents();
+			void HandleKeyDownEvent(SDL_Keycode keyCode);
+
+			SDL_Surface* keySurfaces[KEY_PRESS_SURFACE_TOTAL];
 	};
 }

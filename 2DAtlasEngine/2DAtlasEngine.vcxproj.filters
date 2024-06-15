@@ -37,5 +37,20 @@
     <Image Include="rsc\hello_world.bmp">
       <Filter>Fichiers de ressources</Filter>
     </Image>
+    <Image Include="rsc\down.bmp">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="rsc\left.bmp">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="rsc\press.bmp">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="rsc\right.bmp">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="rsc\up.bmp">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
   </ItemGroup>
 </Project>

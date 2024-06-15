@@ -28,7 +28,12 @@
     <ClInclude Include="inc\Application.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="rsc\down.bmp" />
     <Image Include="rsc\hello_world.bmp" />
+    <Image Include="rsc\left.bmp" />
+    <Image Include="rsc\press.bmp" />
+    <Image Include="rsc\right.bmp" />
+    <Image Include="rsc\up.bmp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

@@ -9,14 +9,14 @@ int main(int argc, char* args[])
 	AE::Application _application{};
 
 	try {
-		_application.run();
+		_application.Run();
 	}
 	catch (const std::exception& e) {
 		std::cerr << e.what() << '\n';
 		return EXIT_FAILURE;
 	}
 
-	_application.shutdown();
+	_application.Shutdown();
 
 	return EXIT_SUCCESS;
 }

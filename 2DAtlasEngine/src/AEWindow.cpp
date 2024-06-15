@@ -5,19 +5,13 @@ namespace AE {
 	AEWindow::AEWindow(int width, int height, std::string name) : _width{ width }, _height{ height }, _name{ name } {
 		if(!InitializeWindow())
 			printf("Failed to initialize!\n");
+
+		_shouldClose = false;
 	}
 
 	AEWindow::~AEWindow() {
-		SDL_FreeSurface(_image);
-		_image = NULL;
-		SDL_FreeSurface(_screenSurface);
-		_screenSurface = NULL;
 		SDL_DestroyWindow(_window);
 		_window = NULL;
-	}
-
-	bool AEWindow::shouldClose(SDL_Event* event) {
-		return event->type == SDL_QUIT ? true : false;
 	}
 
 	bool AEWindow::InitializeWindow() {
@@ -36,27 +30,34 @@ namespace AE {
 			}
 			else
 			{
-				_screenSurface = SDL_GetWindowSurface(_window);
+				_frontBuffer = SDL_GetWindowSurface(_window);
 			}
 		}
 	}
 
-	bool AEWindow::LoadImage() {
-		_image = SDL_LoadBMP("rsc/hello_world.bmp");
-		if (_image == NULL)
+	SDL_Surface* AEWindow::LoadSurface(std::string path) {
+		SDL_Surface* surface = SDL_LoadBMP(path.c_str());
+
+		if (surface == NULL)
 		{
-			printf("Unable to load image %s! SDL Error: %s\n", "02_getting_an_image_on_the_screen/hello_world.bmp", SDL_GetError());
-			return false;
+			printf("Unable to load image %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
 		}
 
-		return true;
+		return surface;
 	}
 
-	void AEWindow::DisplayImage() {
-		if (_image != NULL) {
-			SDL_BlitSurface(_image, NULL, _screenSurface, NULL);
-			SDL_UpdateWindowSurface(_window);
+	bool AEWindow::DrawSurface(SDL_Surface* surface) {
+		if (surface != NULL) {
+			//SDL_BlitSurface(surface, NULL, _backBuffer, NULL);
+			_backBuffer = surface;
+			return true;
 		}
-			
+
+		return false;
+	}
+
+	void AEWindow::SwapBuffers() {
+		SDL_BlitSurface(_backBuffer, NULL, _frontBuffer, NULL);
+		SDL_UpdateWindowSurface(_window);
 	}
 }
