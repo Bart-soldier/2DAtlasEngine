@@ -6,12 +6,14 @@
 
 int main(int argc, char* args[])
 {
-	AE::Application _application{};
+	Game::Application _application{};
 
-	try {
+	try
+	{
 		_application.Run();
 	}
-	catch (const std::exception& e) {
+	catch (const std::exception& e)
+	{
 		std::cerr << e.what() << '\n';
 		return EXIT_FAILURE;
 	}

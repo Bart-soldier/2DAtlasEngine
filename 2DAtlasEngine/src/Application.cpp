@@ -1,57 +1,66 @@
 #include "../inc/Application.hpp"
 
-namespace AE {
-
-	void Application::Run() {
-		keyImages[KEY_PRESS_SURFACE_DEFAULT] = _AEWindow.LoadTexture("rsc/press.png");
+namespace Game
+{
+	void Application::Run()
+	{
+		/*keyImages[KEY_PRESS_SURFACE_DEFAULT] = _AEWindow.LoadTexture("rsc/press.png");
 		keyImages[KEY_PRESS_SURFACE_UP] = _AEWindow.LoadTexture("rsc/up.bmp");
 		keyImages[KEY_PRESS_SURFACE_DOWN] = _AEWindow.LoadTexture("rsc/down.bmp");
 		keyImages[KEY_PRESS_SURFACE_LEFT] = _AEWindow.LoadTexture("rsc/left.bmp");
-		keyImages[KEY_PRESS_SURFACE_RIGHT] = _AEWindow.LoadTexture("rsc/right.bmp");
+		keyImages[KEY_PRESS_SURFACE_RIGHT] = _AEWindow.LoadTexture("rsc/right.bmp");*/
 
-		SDL_Texture* minimap = _AEWindow.LoadTexture("rsc/minimap.png");
+		AE::Texture* minimap = _GraphicEngine.LoadTextureFromFile("rsc/minimap.png");
+		AE::Texture* character = _GraphicEngine.LoadTextureFromFile("rsc/foo.png", true);
+		AE::Texture* background = _GraphicEngine.LoadTextureFromFile("rsc/background.png");
 
-		_lastSurface = KEY_PRESS_SURFACE_DEFAULT;
+		//_lastSurface = KEY_PRESS_SURFACE_DEFAULT;
 
-		while (!_AEWindow._shouldClose) {
+		while (!_GraphicEngine._shouldClose)
+		{
 			HandleEvents();
 
-			_AEWindow.ClearRenderer();
-			_AEWindow.SetViewport(AEWindow::Viewport::FULLSCREEN);
-			_AEWindow.DrawTexture(keyImages[_lastSurface]);
-			_AEWindow.SetViewport(AEWindow::Viewport::MINIMAP);
-			_AEWindow.DrawTexture(minimap);
-			_AEWindow.SwapBuffers();
+			_GraphicEngine.ClearRenderer();
+			_GraphicEngine.SetViewport(AE::GraphicsEngine::Viewport::FULLSCREEN);
+			_GraphicEngine.RenderTexture(background);
+			_GraphicEngine.RenderTexture(character, 240, 190);
+			_GraphicEngine.SetViewport(AE::GraphicsEngine::Viewport::MINIMAP);
+			_GraphicEngine.RenderTextureFullViewport(minimap);
+			_GraphicEngine.UpdateWindow();
 		}
-
-		SDL_DestroyTexture(minimap);
 	}
 
-	void Application::Shutdown() {
-		for (int i = 0; i < KEY_PRESS_SURFACE_TOTAL; ++i)
+	void Application::Shutdown()
+	{
+		/*for (int i = 0; i < KEY_PRESS_SURFACE_TOTAL; ++i)
 		{
 			SDL_DestroyTexture(keyImages[i]);
 			keyImages[i] = NULL;
-		}
+		}*/
 	}
 
-	void Application::HandleEvents() {
+	void Application::HandleEvents()
+	{
 		SDL_Event event;
 
-		while (SDL_PollEvent(&event) != 0) {
+		while (SDL_PollEvent(&event) != 0)
+		{
 			switch (event.type) {
-			case SDL_QUIT:
-				_AEWindow._shouldClose = true;
-				return;
-			case SDL_KEYDOWN:
-				HandleKeyDownEvent(event.key.keysym.sym);
-				break;
+				case SDL_QUIT:
+					_GraphicEngine._shouldClose = true;
+					return;
+				/*case SDL_KEYDOWN:
+					HandleKeyDownEvent(event.key.keysym.sym);
+					break;
+				}*/
 			}
 		}
 	}
 
-	void Application::HandleKeyDownEvent(SDL_Keycode keyCode) {
-		switch (keyCode) {
+	/*void Application::HandleKeyDownEvent(SDL_Keycode keyCode)
+	{
+		switch (keyCode)
+		{
 			case SDLK_UP:
 				_lastSurface = KEY_PRESS_SURFACE_UP;
 				break;
@@ -72,5 +81,5 @@ namespace AE {
 				_lastSurface = KEY_PRESS_SURFACE_DEFAULT;
 				break;
 		}
-	}
+	}*/
 }

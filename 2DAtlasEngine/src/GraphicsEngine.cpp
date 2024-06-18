@@ -1,15 +1,18 @@
-#include "../inc/AEWindow.hpp"
+#include "../inc/GraphicsEngine.hpp"
 
-namespace AE {
-
-	AEWindow::AEWindow(int width, int height, std::string name) : _width{ width }, _height{ height }, _name{ name } {
-		if (!InitializeWindow()) {
+namespace AE
+{
+	GraphicsEngine::GraphicsEngine(int width, int height, std::string name) : _width{ width }, _height{ height }, _name{ name }
+	{
+		if (!InitializeWindow())
+		{
 			printf("Failed to initialize window!\n");
 			_shouldClose = true;
 			return;
 		}
 
-		if (!InitializeRenderer()) {
+		if (!InitializeRenderer())
+		{
 			printf("Failed to initialize renderer!\n");
 			_shouldClose = true;
 			return;
@@ -18,12 +21,10 @@ namespace AE {
 		_shouldClose = false;
 	}
 
-	AEWindow::~AEWindow() {
-		SDL_DestroyTexture(_frontBuffer);
-		_frontBuffer = NULL;
+	GraphicsEngine::~GraphicsEngine()
+	{
 		SDL_DestroyRenderer(_renderer);
 		_renderer = NULL;
-
 		SDL_DestroyWindow(_window);
 		_window = NULL;
 		
@@ -31,7 +32,8 @@ namespace AE {
 		SDL_Quit();
 	}
 
-	bool AEWindow::InitializeWindow() {
+	bool GraphicsEngine::InitializeWindow()
+	{
 		if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		{
 			printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
@@ -48,7 +50,7 @@ namespace AE {
 		return true;
 	}
 
-	bool AEWindow::InitializeRenderer() {
+	bool GraphicsEngine::InitializeRenderer() {
 		_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
 		if (_renderer == NULL) {
 			printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
@@ -66,33 +68,12 @@ namespace AE {
 		return true;
 	}
 
-	SDL_Texture* AEWindow::LoadTexture(std::string path) {
-		SDL_Texture* texture = NULL;
-		SDL_Surface* surface = IMG_Load(path.c_str());
-
-		if (surface == NULL)
-		{
-			printf("Unable to load image %s! SDL Error: %s\n", path.c_str(), IMG_GetError());
-			SDL_FreeSurface(surface);
-			return NULL;
-		}
-
-		texture = SDL_CreateTextureFromSurface(_renderer, surface);
-		if (texture == NULL)
-		{
-			printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
-		}
-
-		SDL_FreeSurface(surface);
-
-		return texture;
-	}
-
-	void AEWindow::ClearRenderer() {
+	void GraphicsEngine::ClearRenderer() {
+		SDL_SetRenderDrawColor(_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 		SDL_RenderClear(_renderer);
 	}
 
-	void AEWindow::SetViewport(Viewport viewportValue) {
+	void GraphicsEngine::SetViewport(Viewport viewportValue) {
 		switch (viewportValue) {
 			case Viewport::FULLSCREEN:
 				_viewport.x = 0;
@@ -111,17 +92,27 @@ namespace AE {
 		SDL_RenderSetViewport(_renderer, &_viewport);
 	}
 
-	void AEWindow::DrawTexture(SDL_Texture* texture) {
+	void GraphicsEngine::UpdateWindow() {
+		SDL_RenderPresent(_renderer);
+	}
+
+	Texture* GraphicsEngine::LoadTextureFromFile(std::string path, bool colorKeyed, Uint8 kred, Uint8 kgreen, Uint8 kblue) {
+		return new Texture(_renderer, path, colorKeyed, kred, kgreen, kblue);
+	}
+
+	void GraphicsEngine::RenderTexture(Texture* texture, int x, int y, int width, int height) {
 		if (texture != NULL) {
-			//SDL_BlitSurface(surface, NULL, _backBuffer, NULL);
-			SDL_RenderCopy(_renderer, texture, NULL, NULL);
+			SDL_Rect renderQuad = { x, y,
+									width  == -1 ? texture->GetWidth()  : width,
+									height == -1 ? texture->GetHeight() : height};
+			SDL_RenderCopy(_renderer, texture->GetTexture(), NULL, &renderQuad);
 		}
 	}
 
-	void AEWindow::SwapBuffers() {
-		//SDL_BlitSurface(_backBuffer, NULL, _frontBuffer, &stretchRect);
-		//SDL_BlitScaled(_backBuffer, NULL, _frontBuffer, &stretchRect);
-		//SDL_UpdateWindowSurface(_window);
-		SDL_RenderPresent(_renderer);
+	void GraphicsEngine::RenderTextureFullViewport(Texture* texture) {
+		if (texture != NULL) {
+			SDL_Rect renderQuad = { 0, 0, _viewport.w, _viewport.h };
+			SDL_RenderCopy(_renderer, texture->GetTexture(), NULL, &renderQuad);
+		}
 	}
 }

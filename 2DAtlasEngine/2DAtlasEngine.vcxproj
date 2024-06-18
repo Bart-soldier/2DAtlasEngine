@@ -19,16 +19,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\AEWindow.cpp" />
+    <ClCompile Include="src\Texture.cpp" />
+    <ClCompile Include="src\GraphicsEngine.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\AEWindow.hpp" />
+    <ClInclude Include="inc\Texture.hpp" />
+    <ClInclude Include="inc\GraphicsEngine.hpp" />
     <ClInclude Include="inc\Application.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="rsc\background.png" />
     <Image Include="rsc\down.bmp" />
+    <Image Include="rsc\foo.png" />
     <Image Include="rsc\hello_world.bmp" />
     <Image Include="rsc\left.bmp" />
     <Image Include="rsc\minimap.png" />
