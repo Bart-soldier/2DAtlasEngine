@@ -27,6 +27,7 @@ namespace AE {
 		std::string _name;
 		const int _width;
 		const int _height;
+		SDL_Rect stretchRect;
 
 		bool InitializeWindow();
 	};
