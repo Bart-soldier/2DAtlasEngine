@@ -9,15 +9,22 @@ namespace AE {
 		keyImages[KEY_PRESS_SURFACE_LEFT] = _AEWindow.LoadTexture("rsc/left.bmp");
 		keyImages[KEY_PRESS_SURFACE_RIGHT] = _AEWindow.LoadTexture("rsc/right.bmp");
 
+		SDL_Texture* minimap = _AEWindow.LoadTexture("rsc/minimap.png");
+
 		_lastSurface = KEY_PRESS_SURFACE_DEFAULT;
 
 		while (!_AEWindow._shouldClose) {
 			HandleEvents();
 
 			_AEWindow.ClearRenderer();
+			_AEWindow.SetViewport(AEWindow::Viewport::FULLSCREEN);
 			_AEWindow.DrawTexture(keyImages[_lastSurface]);
+			_AEWindow.SetViewport(AEWindow::Viewport::MINIMAP);
+			_AEWindow.DrawTexture(minimap);
 			_AEWindow.SwapBuffers();
 		}
+
+		SDL_DestroyTexture(minimap);
 	}
 
 	void Application::Shutdown() {

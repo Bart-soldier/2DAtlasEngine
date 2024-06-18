@@ -9,6 +9,13 @@ namespace AE {
 	class AEWindow {
 
 	public:
+		enum Viewport
+		{
+			FULLSCREEN,
+			MINIMAP,
+			TOTAL
+		};
+
 		AEWindow(int width, int height, std::string name);
 		~AEWindow();
 
@@ -19,6 +26,7 @@ namespace AE {
 
 		SDL_Texture* LoadTexture(std::string path);
 		void ClearRenderer();
+		void SetViewport(Viewport viewportValue);
 		void DrawTexture(SDL_Texture* texture);
 		void SwapBuffers();
 
@@ -29,6 +37,7 @@ namespace AE {
 		const int _height;
 
 		SDL_Renderer* _renderer;
+		SDL_Rect _viewport;
 		SDL_Texture* _frontBuffer;
 
 		bool InitializeWindow();

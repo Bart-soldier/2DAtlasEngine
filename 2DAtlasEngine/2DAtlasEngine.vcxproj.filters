@@ -52,5 +52,8 @@
     <Image Include="rsc\press.png">
       <Filter>Fichiers de ressources</Filter>
     </Image>
+    <Image Include="rsc\minimap.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
   </ItemGroup>
 </Project>

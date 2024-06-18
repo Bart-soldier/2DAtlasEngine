@@ -92,6 +92,25 @@ namespace AE {
 		SDL_RenderClear(_renderer);
 	}
 
+	void AEWindow::SetViewport(Viewport viewportValue) {
+		switch (viewportValue) {
+			case Viewport::FULLSCREEN:
+				_viewport.x = 0;
+				_viewport.y = 0;
+				_viewport.w = _width;
+				_viewport.h = _height;
+				break;
+			case Viewport::MINIMAP:
+				_viewport.x = _width - (_width/4);
+				_viewport.y = 0;
+				_viewport.w = _width / 4;
+				_viewport.h = _height / 4;
+				break;
+		}
+
+		SDL_RenderSetViewport(_renderer, &_viewport);
+	}
+
 	void AEWindow::DrawTexture(SDL_Texture* texture) {
 		if (texture != NULL) {
 			//SDL_BlitSurface(surface, NULL, _backBuffer, NULL);
