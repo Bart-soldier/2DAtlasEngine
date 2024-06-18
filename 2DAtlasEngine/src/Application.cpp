@@ -3,18 +3,19 @@
 namespace AE {
 
 	void Application::Run() {
-		keySurfaces[KEY_PRESS_SURFACE_DEFAULT] = _AEWindow.LoadSurface("rsc/press.png");
-		keySurfaces[KEY_PRESS_SURFACE_UP] = _AEWindow.LoadSurface("rsc/up.bmp");
-		keySurfaces[KEY_PRESS_SURFACE_DOWN] = _AEWindow.LoadSurface("rsc/down.bmp");
-		keySurfaces[KEY_PRESS_SURFACE_LEFT] = _AEWindow.LoadSurface("rsc/left.bmp");
-		keySurfaces[KEY_PRESS_SURFACE_RIGHT] = _AEWindow.LoadSurface("rsc/right.bmp");
+		keyImages[KEY_PRESS_SURFACE_DEFAULT] = _AEWindow.LoadTexture("rsc/press.png");
+		keyImages[KEY_PRESS_SURFACE_UP] = _AEWindow.LoadTexture("rsc/up.bmp");
+		keyImages[KEY_PRESS_SURFACE_DOWN] = _AEWindow.LoadTexture("rsc/down.bmp");
+		keyImages[KEY_PRESS_SURFACE_LEFT] = _AEWindow.LoadTexture("rsc/left.bmp");
+		keyImages[KEY_PRESS_SURFACE_RIGHT] = _AEWindow.LoadTexture("rsc/right.bmp");
 
-		_AEWindow.DrawSurface(keySurfaces[KEY_PRESS_SURFACE_DEFAULT]);
-		_AEWindow.SwapBuffers();
+		_lastSurface = KEY_PRESS_SURFACE_DEFAULT;
 
 		while (!_AEWindow._shouldClose) {
 			HandleEvents();
 
+			_AEWindow.ClearRenderer();
+			_AEWindow.DrawTexture(keyImages[_lastSurface]);
 			_AEWindow.SwapBuffers();
 		}
 	}
@@ -22,12 +23,9 @@ namespace AE {
 	void Application::Shutdown() {
 		for (int i = 0; i < KEY_PRESS_SURFACE_TOTAL; ++i)
 		{
-			SDL_FreeSurface(keySurfaces[i]);
-			keySurfaces[i] = NULL;
+			SDL_DestroyTexture(keyImages[i]);
+			keyImages[i] = NULL;
 		}
-
-
-		SDL_Quit();
 	}
 
 	void Application::HandleEvents() {
@@ -48,23 +46,23 @@ namespace AE {
 	void Application::HandleKeyDownEvent(SDL_Keycode keyCode) {
 		switch (keyCode) {
 			case SDLK_UP:
-				_AEWindow.DrawSurface(keySurfaces[KEY_PRESS_SURFACE_UP]);
+				_lastSurface = KEY_PRESS_SURFACE_UP;
 				break;
 
 			case SDLK_DOWN:
-				_AEWindow.DrawSurface(keySurfaces[KEY_PRESS_SURFACE_DOWN]);
+				_lastSurface = KEY_PRESS_SURFACE_DOWN;
 				break;
 
 			case SDLK_LEFT:
-				_AEWindow.DrawSurface(keySurfaces[KEY_PRESS_SURFACE_LEFT]);
+				_lastSurface = KEY_PRESS_SURFACE_LEFT;
 				break;
 
 			case SDLK_RIGHT:
-				_AEWindow.DrawSurface(keySurfaces[KEY_PRESS_SURFACE_RIGHT]);
+				_lastSurface = KEY_PRESS_SURFACE_RIGHT;
 				break;
 
 			default:
-				_AEWindow.DrawSurface(keySurfaces[KEY_PRESS_SURFACE_DEFAULT]);
+				_lastSurface = KEY_PRESS_SURFACE_DEFAULT;
 				break;
 		}
 	}

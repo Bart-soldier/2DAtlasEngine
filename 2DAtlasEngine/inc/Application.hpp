@@ -29,6 +29,7 @@ namespace AE {
 			void HandleEvents();
 			void HandleKeyDownEvent(SDL_Keycode keyCode);
 
-			SDL_Surface* keySurfaces[KEY_PRESS_SURFACE_TOTAL];
+			SDL_Texture* keyImages[KEY_PRESS_SURFACE_TOTAL];
+			KeyPressSurfaces _lastSurface;
 	};
 }

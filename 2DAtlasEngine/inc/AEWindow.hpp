@@ -17,19 +17,21 @@ namespace AE {
 
 		bool _shouldClose;
 
-		SDL_Surface* LoadSurface(std::string path);
-		bool DrawSurface(SDL_Surface* surface);
+		SDL_Texture* LoadTexture(std::string path);
+		void ClearRenderer();
+		void DrawTexture(SDL_Texture* texture);
 		void SwapBuffers();
 
 	private:
 		SDL_Window* _window;
-		SDL_Surface* _frontBuffer;
-		SDL_Surface* _backBuffer;
 		std::string _name;
 		const int _width;
 		const int _height;
-		SDL_Rect stretchRect;
+
+		SDL_Renderer* _renderer;
+		SDL_Texture* _frontBuffer;
 
 		bool InitializeWindow();
+		bool InitializeRenderer();
 	};
 }

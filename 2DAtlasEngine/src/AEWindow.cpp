@@ -3,20 +3,32 @@
 namespace AE {
 
 	AEWindow::AEWindow(int width, int height, std::string name) : _width{ width }, _height{ height }, _name{ name } {
-		if(!InitializeWindow())
-			printf("Failed to initialize!\n");
+		if (!InitializeWindow()) {
+			printf("Failed to initialize window!\n");
+			_shouldClose = true;
+			return;
+		}
+
+		if (!InitializeRenderer()) {
+			printf("Failed to initialize renderer!\n");
+			_shouldClose = true;
+			return;
+		}
 
 		_shouldClose = false;
-
-		stretchRect.x = 0;
-		stretchRect.y = 0;
-		stretchRect.w = _width;
-		stretchRect.h = _height;
 	}
 
 	AEWindow::~AEWindow() {
+		SDL_DestroyTexture(_frontBuffer);
+		_frontBuffer = NULL;
+		SDL_DestroyRenderer(_renderer);
+		_renderer = NULL;
+
 		SDL_DestroyWindow(_window);
 		_window = NULL;
+		
+		IMG_Quit();
+		SDL_Quit();
 	}
 
 	bool AEWindow::InitializeWindow() {
@@ -33,50 +45,64 @@ namespace AE {
 			return false;
 		}
 
+		return true;
+	}
+
+	bool AEWindow::InitializeRenderer() {
+		_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
+		if (_renderer == NULL) {
+			printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
+			return false;
+		}
+
+		SDL_SetRenderDrawColor(_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
+
 		int imgFlag = IMG_INIT_PNG;
 		if (!(IMG_Init(imgFlag) & imgFlag)) {
 			printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
 			return false;
 		}
-		
-		_frontBuffer = SDL_GetWindowSurface(_window);
+
 		return true;
 	}
 
-	SDL_Surface* AEWindow::LoadSurface(std::string path) {
-		SDL_Surface* optimizedSurface = NULL;
+	SDL_Texture* AEWindow::LoadTexture(std::string path) {
+		SDL_Texture* texture = NULL;
 		SDL_Surface* surface = IMG_Load(path.c_str());
 
 		if (surface == NULL)
 		{
 			printf("Unable to load image %s! SDL Error: %s\n", path.c_str(), IMG_GetError());
+			SDL_FreeSurface(surface);
 			return NULL;
 		}
 
-		optimizedSurface = SDL_ConvertSurface(surface, _frontBuffer->format, 0);
-		if (optimizedSurface == NULL)
+		texture = SDL_CreateTextureFromSurface(_renderer, surface);
+		if (texture == NULL)
 		{
-			printf("Unable to optimize image %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
+			printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
 		}
 
 		SDL_FreeSurface(surface);
 
-		return optimizedSurface;
+		return texture;
 	}
 
-	bool AEWindow::DrawSurface(SDL_Surface* surface) {
-		if (surface != NULL) {
-			//SDL_BlitSurface(surface, NULL, _backBuffer, NULL);
-			_backBuffer = surface;
-			return true;
-		}
+	void AEWindow::ClearRenderer() {
+		SDL_RenderClear(_renderer);
+	}
 
-		return false;
+	void AEWindow::DrawTexture(SDL_Texture* texture) {
+		if (texture != NULL) {
+			//SDL_BlitSurface(surface, NULL, _backBuffer, NULL);
+			SDL_RenderCopy(_renderer, texture, NULL, NULL);
+		}
 	}
 
 	void AEWindow::SwapBuffers() {
 		//SDL_BlitSurface(_backBuffer, NULL, _frontBuffer, &stretchRect);
-		SDL_BlitScaled(_backBuffer, NULL, _frontBuffer, &stretchRect);
-		SDL_UpdateWindowSurface(_window);
+		//SDL_BlitScaled(_backBuffer, NULL, _frontBuffer, &stretchRect);
+		//SDL_UpdateWindowSurface(_window);
+		SDL_RenderPresent(_renderer);
 	}
 }
