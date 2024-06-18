@@ -32,6 +32,12 @@ namespace AE {
 			printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
 			return false;
 		}
+
+		int imgFlag = IMG_INIT_PNG;
+		if (!(IMG_Init(imgFlag) & imgFlag)) {
+			printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+			return false;
+		}
 		
 		_frontBuffer = SDL_GetWindowSurface(_window);
 		return true;
@@ -39,11 +45,11 @@ namespace AE {
 
 	SDL_Surface* AEWindow::LoadSurface(std::string path) {
 		SDL_Surface* optimizedSurface = NULL;
-		SDL_Surface* surface = SDL_LoadBMP(path.c_str());
+		SDL_Surface* surface = IMG_Load(path.c_str());
 
 		if (surface == NULL)
 		{
-			printf("Unable to load image %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
+			printf("Unable to load image %s! SDL Error: %s\n", path.c_str(), IMG_GetError());
 			return NULL;
 		}
 

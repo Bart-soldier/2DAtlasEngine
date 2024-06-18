@@ -3,7 +3,7 @@
 namespace AE {
 
 	void Application::Run() {
-		keySurfaces[KEY_PRESS_SURFACE_DEFAULT] = _AEWindow.LoadSurface("rsc/press.bmp");
+		keySurfaces[KEY_PRESS_SURFACE_DEFAULT] = _AEWindow.LoadSurface("rsc/press.png");
 		keySurfaces[KEY_PRESS_SURFACE_UP] = _AEWindow.LoadSurface("rsc/up.bmp");
 		keySurfaces[KEY_PRESS_SURFACE_DOWN] = _AEWindow.LoadSurface("rsc/down.bmp");
 		keySurfaces[KEY_PRESS_SURFACE_LEFT] = _AEWindow.LoadSurface("rsc/left.bmp");

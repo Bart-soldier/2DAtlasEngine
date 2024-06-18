@@ -43,13 +43,13 @@
     <Image Include="rsc\left.bmp">
       <Filter>Fichiers de ressources</Filter>
     </Image>
-    <Image Include="rsc\press.bmp">
-      <Filter>Fichiers de ressources</Filter>
-    </Image>
     <Image Include="rsc\right.bmp">
       <Filter>Fichiers de ressources</Filter>
     </Image>
     <Image Include="rsc\up.bmp">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="rsc\press.png">
       <Filter>Fichiers de ressources</Filter>
     </Image>
   </ItemGroup>
