@@ -11,6 +11,8 @@ namespace Game
 		keyImages[KEY_PRESS_SURFACE_RIGHT] = _AEWindow.LoadTexture("rsc/right.bmp");*/
 
 		AE::Texture* minimap = _GraphicEngine.LoadTextureFromFile("rsc/minimap.png");
+		minimap->SetBlendMode();
+		minimap->SetAlpha(192);
 		AE::Texture* character = _GraphicEngine.LoadTextureFromFile("rsc/images/characters/DrJonez.png", true);
 		SDL_Rect clip = { 0, 64, TILE_WIDTH, 2 * TILE_HEIGHT };
 		AE::Texture* background = _GraphicEngine.LoadTextureFromFile("rsc/background.png");

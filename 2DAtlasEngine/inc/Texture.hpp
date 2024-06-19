@@ -11,6 +11,10 @@ namespace AE
 		Texture(SDL_Renderer* renderer, std::string path, bool colorKeyed, Uint8 kred, Uint8 kgreen, Uint8 kblue);
 		~Texture();
 
+		void SetColor(Uint8 red, Uint8 green, Uint8 blue);
+		void SetBlendMode(SDL_BlendMode blendMode = SDL_BLENDMODE_BLEND);
+		void SetAlpha(Uint8 alpha);
+
 		SDL_Texture* GetTexture();
 		int GetWidth() const;
 		int GetHeight() const;

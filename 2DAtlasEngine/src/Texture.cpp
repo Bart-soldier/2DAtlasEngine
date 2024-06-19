@@ -59,6 +59,21 @@ namespace AE
 		return true;
 	}
 
+	void Texture::SetColor(Uint8 red, Uint8 green, Uint8 blue)
+	{
+		SDL_SetTextureColorMod(_texture, red, green, blue);
+	}
+
+	void Texture::SetBlendMode(SDL_BlendMode blendMode)
+	{
+		SDL_SetTextureBlendMode(_texture, blendMode);
+	}
+
+	void Texture::SetAlpha(Uint8 alpha)
+	{
+		SDL_SetTextureAlphaMod(_texture, alpha);
+	}
+
 	SDL_Texture* Texture::GetTexture()
 	{
 		return _texture;
