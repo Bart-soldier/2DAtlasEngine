@@ -51,7 +51,7 @@ namespace AE
 	}
 
 	bool GraphicsEngine::InitializeRenderer() {
-		_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
+		_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 		if (_renderer == NULL) {
 			printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
 			return false;
@@ -100,7 +100,7 @@ namespace AE
 		return new Texture(_renderer, path, colorKeyed, kred, kgreen, kblue);
 	}
 
-	void GraphicsEngine::RenderTexture(Texture* texture, int x, int y, SDL_Rect* clip) {
+	void GraphicsEngine::RenderTexture(Texture* texture, int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip) {
 		if (texture != NULL) {
 			SDL_Rect renderQuad = { x, y, texture->GetWidth(), texture->GetHeight()};
 
@@ -110,7 +110,7 @@ namespace AE
 				renderQuad.h = clip->h;
 			}
 
-			SDL_RenderCopy(_renderer, texture->GetTexture(), clip, &renderQuad);
+			SDL_RenderCopyEx(_renderer, texture->GetTexture(), clip, &renderQuad, angle, center, flip);
 		}
 	}
 

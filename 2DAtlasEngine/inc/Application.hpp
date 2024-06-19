@@ -1,6 +1,8 @@
 #pragma once
 
 #include "GraphicsEngine.hpp"
+#include "Scene.hpp"
+#include "Ground.hpp"
 
 namespace Game {
 
@@ -19,14 +21,19 @@ namespace Game {
 		public:
 			static constexpr int WIDTH = 640;
 			static constexpr int HEIGHT = 480;
-			static constexpr int TILE_WIDTH = 16;
-			static constexpr int TILE_HEIGHT = 16;
+			static constexpr int TILE_SIZE = 16;
 
 			void Run();
 			void Shutdown();
 
 		private:
 			AE::GraphicsEngine _GraphicEngine{ WIDTH, HEIGHT, "Atlas Engine 2.0" };
+
+			Scene* _currentScene;
+
+			void RenderCurrentScene();
+			void RenderCurrentCharacters();
+			void RenderUI();
 
 			void HandleEvents();
 			/*void HandleKeyDownEvent(SDL_Keycode keyCode);

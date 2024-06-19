@@ -31,7 +31,7 @@ namespace AE
 		void UpdateWindow();
 
 		Texture* LoadTextureFromFile(std::string path, bool colorKeyed = false, Uint8 kred = 0, Uint8 kgreen = 0xFF, Uint8 kblue = 0xFF);
-		void RenderTexture(Texture* texture, int x = 0, int y = 0, SDL_Rect* clip = NULL);
+		void RenderTexture(Texture* texture, int x = 0, int y = 0, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
 		void RenderTextureFullViewport(Texture* texture);
 
 	private:

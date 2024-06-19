@@ -19,12 +19,20 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Character.cpp" />
+    <ClCompile Include="src\Ground.cpp" />
+    <ClCompile Include="src\GameObject.cpp" />
+    <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\GraphicsEngine.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inc\Character.hpp" />
+    <ClInclude Include="inc\GameObject.hpp" />
+    <ClInclude Include="inc\Ground.hpp" />
+    <ClInclude Include="inc\Scene.hpp" />
     <ClInclude Include="inc\Texture.hpp" />
     <ClInclude Include="inc\GraphicsEngine.hpp" />
     <ClInclude Include="inc\Application.hpp" />
