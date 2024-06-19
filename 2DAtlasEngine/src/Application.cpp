@@ -11,7 +11,8 @@ namespace Game
 		keyImages[KEY_PRESS_SURFACE_RIGHT] = _AEWindow.LoadTexture("rsc/right.bmp");*/
 
 		AE::Texture* minimap = _GraphicEngine.LoadTextureFromFile("rsc/minimap.png");
-		AE::Texture* character = _GraphicEngine.LoadTextureFromFile("rsc/foo.png", true);
+		AE::Texture* character = _GraphicEngine.LoadTextureFromFile("rsc/images/characters/DrJonez.png", true);
+		SDL_Rect clip = { 0, 64, TILE_WIDTH, 2 * TILE_HEIGHT };
 		AE::Texture* background = _GraphicEngine.LoadTextureFromFile("rsc/background.png");
 
 		//_lastSurface = KEY_PRESS_SURFACE_DEFAULT;
@@ -23,7 +24,7 @@ namespace Game
 			_GraphicEngine.ClearRenderer();
 			_GraphicEngine.SetViewport(AE::GraphicsEngine::Viewport::FULLSCREEN);
 			_GraphicEngine.RenderTexture(background);
-			_GraphicEngine.RenderTexture(character, 240, 190);
+			_GraphicEngine.RenderTexture(character, 240, 190, &clip);
 			_GraphicEngine.SetViewport(AE::GraphicsEngine::Viewport::MINIMAP);
 			_GraphicEngine.RenderTextureFullViewport(minimap);
 			_GraphicEngine.UpdateWindow();

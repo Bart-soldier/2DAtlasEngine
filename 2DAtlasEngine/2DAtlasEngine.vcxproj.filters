@@ -40,24 +40,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="rsc\hello_world.bmp">
-      <Filter>Fichiers de ressources</Filter>
-    </Image>
-    <Image Include="rsc\down.bmp">
-      <Filter>Fichiers de ressources</Filter>
-    </Image>
-    <Image Include="rsc\left.bmp">
-      <Filter>Fichiers de ressources</Filter>
-    </Image>
-    <Image Include="rsc\right.bmp">
-      <Filter>Fichiers de ressources</Filter>
-    </Image>
-    <Image Include="rsc\up.bmp">
-      <Filter>Fichiers de ressources</Filter>
-    </Image>
-    <Image Include="rsc\press.png">
-      <Filter>Fichiers de ressources</Filter>
-    </Image>
     <Image Include="rsc\minimap.png">
       <Filter>Fichiers de ressources</Filter>
     </Image>
@@ -65,6 +47,39 @@
       <Filter>Fichiers de ressources</Filter>
     </Image>
     <Image Include="rsc\background.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="rsc\images\characters\DrJonez.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="rsc\images\environments\DarkGrass.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="rsc\images\environments\Door.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="rsc\images\environments\Floor.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="rsc\images\environments\Grass.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="rsc\images\environments\Sand.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="rsc\images\environments\Tomb.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="rsc\images\environments\TombExterior.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="rsc\images\environments\Wall.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="rsc\images\objects\ArkCovenant.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="rsc\images\ui\Inventory.png">
       <Filter>Fichiers de ressources</Filter>
     </Image>
   </ItemGroup>

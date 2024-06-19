@@ -100,12 +100,17 @@ namespace AE
 		return new Texture(_renderer, path, colorKeyed, kred, kgreen, kblue);
 	}
 
-	void GraphicsEngine::RenderTexture(Texture* texture, int x, int y, int width, int height) {
+	void GraphicsEngine::RenderTexture(Texture* texture, int x, int y, SDL_Rect* clip) {
 		if (texture != NULL) {
-			SDL_Rect renderQuad = { x, y,
-									width  == -1 ? texture->GetWidth()  : width,
-									height == -1 ? texture->GetHeight() : height};
-			SDL_RenderCopy(_renderer, texture->GetTexture(), NULL, &renderQuad);
+			SDL_Rect renderQuad = { x, y, texture->GetWidth(), texture->GetHeight()};
+
+			if (clip != NULL)
+			{
+				renderQuad.w = clip->w;
+				renderQuad.h = clip->h;
+			}
+
+			SDL_RenderCopy(_renderer, texture->GetTexture(), clip, &renderQuad);
 		}
 	}
 

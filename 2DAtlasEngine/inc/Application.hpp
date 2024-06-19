@@ -19,6 +19,8 @@ namespace Game {
 		public:
 			static constexpr int WIDTH = 640;
 			static constexpr int HEIGHT = 480;
+			static constexpr int TILE_WIDTH = 16;
+			static constexpr int TILE_HEIGHT = 16;
 
 			void Run();
 			void Shutdown();

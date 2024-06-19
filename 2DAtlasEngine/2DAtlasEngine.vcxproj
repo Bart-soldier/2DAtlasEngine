@@ -31,14 +31,19 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="rsc\background.png" />
-    <Image Include="rsc\down.bmp" />
     <Image Include="rsc\foo.png" />
-    <Image Include="rsc\hello_world.bmp" />
-    <Image Include="rsc\left.bmp" />
+    <Image Include="rsc\images\characters\DrJonez.png" />
+    <Image Include="rsc\images\environments\DarkGrass.png" />
+    <Image Include="rsc\images\environments\Door.png" />
+    <Image Include="rsc\images\environments\Floor.png" />
+    <Image Include="rsc\images\environments\Grass.png" />
+    <Image Include="rsc\images\environments\Sand.png" />
+    <Image Include="rsc\images\environments\Tomb.png" />
+    <Image Include="rsc\images\environments\TombExterior.png" />
+    <Image Include="rsc\images\environments\Wall.png" />
+    <Image Include="rsc\images\objects\ArkCovenant.png" />
+    <Image Include="rsc\images\ui\Inventory.png" />
     <Image Include="rsc\minimap.png" />
-    <Image Include="rsc\press.png" />
-    <Image Include="rsc\right.bmp" />
-    <Image Include="rsc\up.bmp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
