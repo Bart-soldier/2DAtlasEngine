@@ -30,7 +30,8 @@ namespace AE
 		void SetViewport(Viewport viewportValue);
 		void UpdateWindow();
 
-		Texture* LoadTextureFromFile(std::string path, bool colorKeyed = false, Uint8 kred = 0, Uint8 kgreen = 0xFF, Uint8 kblue = 0xFF);
+		Texture* CreateTextureFromFile(std::string path, bool colorKeyed = false, Uint8 kred = 0, Uint8 kgreen = 0xFF, Uint8 kblue = 0xFF);
+		Texture* CreateTextureFromText(TTF_Font* font, std::string text, SDL_Color color);
 		void RenderTexture(Texture* texture, int x = 0, int y = 0, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
 		void RenderTextureFullViewport(Texture* texture);
 
@@ -45,5 +46,6 @@ namespace AE
 
 		bool InitializeWindow();
 		bool InitializeRenderer();
+		bool InitializeLibraries();
 	};
 }

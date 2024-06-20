@@ -28,8 +28,8 @@ namespace Game {
 
 		private:
 			AE::GraphicsEngine _GraphicEngine{ WIDTH, HEIGHT, "Atlas Engine 2.0" };
-
-			Scene* _currentScene;
+			Scene* _currentScene = NULL;
+			TTF_Font* _font = NULL;
 
 			void RenderCurrentScene();
 			void RenderCurrentCharacters();

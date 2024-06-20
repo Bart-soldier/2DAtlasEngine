@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 #include <string>
 
 namespace AE
@@ -9,6 +10,7 @@ namespace AE
 	{
 	public:
 		Texture(SDL_Renderer* renderer, std::string path, bool colorKeyed, Uint8 kred, Uint8 kgreen, Uint8 kblue);
+		Texture(SDL_Renderer* renderer, TTF_Font* font, std::string text, SDL_Color color);
 		~Texture();
 
 		void SetColor(Uint8 red, Uint8 green, Uint8 blue);
@@ -28,7 +30,7 @@ namespace AE
 		Uint8 _kgreen;
 		Uint8 _kblue;
 
-		bool LoadFromFile(SDL_Renderer* renderer, std::string path);
+		bool LoadFromSurface(SDL_Renderer* renderer, SDL_Surface* surface);
 		void Reset();
 	};
 }

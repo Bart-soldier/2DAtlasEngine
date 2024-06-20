@@ -11,7 +11,13 @@ namespace AE
 		_kgreen = kgreen;
 		_kblue = kblue;
 
-		LoadFromFile(renderer, path);
+		LoadFromSurface(renderer, IMG_Load(path.c_str()));
+	}
+
+	Texture::Texture(SDL_Renderer* renderer, TTF_Font* font, std::string text, SDL_Color color)
+	{
+		Reset();
+		LoadFromSurface(renderer, TTF_RenderText_Solid(font, text.c_str(), color));
 	}
 
 	Texture::~Texture()
@@ -29,24 +35,21 @@ namespace AE
 		_height = 0;
 	}
 
-	bool Texture::LoadFromFile(SDL_Renderer* renderer, std::string path)
+	bool Texture::LoadFromSurface(SDL_Renderer* renderer, SDL_Surface* surface)
 	{
-		SDL_Texture* texture = NULL;
-
-		SDL_Surface* surface = IMG_Load(path.c_str());
 		if (surface == NULL)
 		{
-			printf("Unable to load image %s! SDL Error: %s\n", path.c_str(), IMG_GetError());
+			printf("Unable to load image! SDL Error: %s\n", IMG_GetError());
 			return false;
 		}
 
 		if(_colorKeyed)
 			SDL_SetColorKey(surface, SDL_TRUE, SDL_MapRGB(surface->format, _kred, _kgreen, _kblue));
 
-		texture = SDL_CreateTextureFromSurface(renderer, surface);
+		SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 		if (texture == NULL)
 		{
-			printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
+			printf("Unable to create texture! SDL Error: %s\n", SDL_GetError());
 			return false;
 		}
 

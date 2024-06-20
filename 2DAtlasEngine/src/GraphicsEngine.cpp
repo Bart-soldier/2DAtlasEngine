@@ -18,6 +18,13 @@ namespace AE
 			return;
 		}
 
+		if (!InitializeLibraries())
+		{
+			printf("Failed to initialize librairies!\n");
+			_shouldClose = true;
+			return;
+		}
+
 		_shouldClose = false;
 	}
 
@@ -28,6 +35,7 @@ namespace AE
 		SDL_DestroyWindow(_window);
 		_window = NULL;
 		
+		TTF_Quit();
 		IMG_Quit();
 		SDL_Quit();
 	}
@@ -50,7 +58,8 @@ namespace AE
 		return true;
 	}
 
-	bool GraphicsEngine::InitializeRenderer() {
+	bool GraphicsEngine::InitializeRenderer()
+	{
 		_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 		if (_renderer == NULL) {
 			printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
@@ -59,21 +68,34 @@ namespace AE
 
 		SDL_SetRenderDrawColor(_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
+		return true;
+	}
+
+	bool GraphicsEngine::InitializeLibraries()
+	{
 		int imgFlag = IMG_INIT_PNG;
 		if (!(IMG_Init(imgFlag) & imgFlag)) {
 			printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
 			return false;
 		}
 
+		if (TTF_Init() == -1)
+		{
+			printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
+			return false;
+		}
+
 		return true;
 	}
 
-	void GraphicsEngine::ClearRenderer() {
+	void GraphicsEngine::ClearRenderer()
+	{
 		SDL_SetRenderDrawColor(_renderer, 0xFF, 0xFF, 0xFF, 0xFF);
 		SDL_RenderClear(_renderer);
 	}
 
-	void GraphicsEngine::SetViewport(Viewport viewportValue) {
+	void GraphicsEngine::SetViewport(Viewport viewportValue)
+	{
 		switch (viewportValue) {
 			case Viewport::FULLSCREEN:
 				_viewport.x = 0;
@@ -92,16 +114,25 @@ namespace AE
 		SDL_RenderSetViewport(_renderer, &_viewport);
 	}
 
-	void GraphicsEngine::UpdateWindow() {
+	void GraphicsEngine::UpdateWindow()
+	{
 		SDL_RenderPresent(_renderer);
 	}
 
-	Texture* GraphicsEngine::LoadTextureFromFile(std::string path, bool colorKeyed, Uint8 kred, Uint8 kgreen, Uint8 kblue) {
+	Texture* GraphicsEngine::CreateTextureFromFile(std::string path, bool colorKeyed, Uint8 kred, Uint8 kgreen, Uint8 kblue)
+	{
 		return new Texture(_renderer, path, colorKeyed, kred, kgreen, kblue);
 	}
 
-	void GraphicsEngine::RenderTexture(Texture* texture, int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip) {
-		if (texture != NULL) {
+	Texture* GraphicsEngine::CreateTextureFromText(TTF_Font* font, std::string text, SDL_Color color)
+	{
+		return new Texture(_renderer, font, text, color);
+	}
+
+	void GraphicsEngine::RenderTexture(Texture* texture, int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
+	{
+		if (texture != NULL)
+		{
 			SDL_Rect renderQuad = { x, y, texture->GetWidth(), texture->GetHeight()};
 
 			if (clip != NULL)
@@ -114,8 +145,10 @@ namespace AE
 		}
 	}
 
-	void GraphicsEngine::RenderTextureFullViewport(Texture* texture) {
-		if (texture != NULL) {
+	void GraphicsEngine::RenderTextureFullViewport(Texture* texture)
+	{
+		if (texture != NULL)
+		{
 			SDL_Rect renderQuad = { 0, 0, _viewport.w, _viewport.h };
 			SDL_RenderCopy(_renderer, texture->GetTexture(), NULL, &renderQuad);
 		}

@@ -10,15 +10,20 @@ namespace Game
 		keyImages[KEY_PRESS_SURFACE_LEFT] = _AEWindow.LoadTexture("rsc/left.bmp");
 		keyImages[KEY_PRESS_SURFACE_RIGHT] = _AEWindow.LoadTexture("rsc/right.bmp");*/
 
-		AE::Texture* grassTexture = _GraphicEngine.LoadTextureFromFile("rsc/images/environments/Grass.png");
+		_font = TTF_OpenFont("rsc/fonts/lazy.ttf", 28);
+		if (_font == NULL)
+			printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
+		AE::Texture* text = _GraphicEngine.CreateTextureFromText(_font, "FPS: ", { 0, 0, 0 });
+
+		AE::Texture* grassTexture = _GraphicEngine.CreateTextureFromFile("rsc/images/environments/Grass.png");
 		Ground* grass = new Ground(grassTexture);
 		_currentScene = new Scene(40, 20, "Main Scene", grass);
 
-		AE::Texture* minimap = _GraphicEngine.LoadTextureFromFile("rsc/minimap.png");
+		AE::Texture* minimap = _GraphicEngine.CreateTextureFromFile("rsc/minimap.png");
 		minimap->SetBlendMode();
 		minimap->SetAlpha(192);
 
-		AE::Texture* character = _GraphicEngine.LoadTextureFromFile("rsc/images/characters/DrJonez.png");
+		AE::Texture* character = _GraphicEngine.CreateTextureFromFile("rsc/images/characters/DrJonez.png");
 		/*SDL_Rect spriteClips[4];
 		spriteClips[0] = { 0, 64, TILE_SIZE, 2 * TILE_SIZE };
 		spriteClips[1] = { TILE_SIZE, 64, TILE_SIZE, 2 * TILE_SIZE };
@@ -37,6 +42,8 @@ namespace Game
 
 			//_GraphicEngine.RenderTexture(character, 240, 190, &spriteClips[frame]);
 			_GraphicEngine.RenderTexture(character, 240, 190);
+
+			_GraphicEngine.RenderTexture(text);
 			_GraphicEngine.SetViewport(AE::GraphicsEngine::Viewport::MINIMAP);
 			_GraphicEngine.RenderTextureFullViewport(minimap);
 
@@ -48,6 +55,9 @@ namespace Game
 
 	void Application::Shutdown()
 	{
+		TTF_CloseFont(_font);
+		_font = NULL;
+
 		/*for (int i = 0; i < KEY_PRESS_SURFACE_TOTAL; ++i)
 		{
 			SDL_DestroyTexture(keyImages[i]);
