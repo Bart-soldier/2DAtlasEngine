@@ -47,14 +47,13 @@
     <ClInclude Include="inc\SpriteTexture.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="rsc\background.png" />
-    <Image Include="rsc\foo.png" />
     <Image Include="rsc\images\characters\DrJonez.png" />
     <Image Include="rsc\images\environments\DarkGrass.png" />
     <Image Include="rsc\images\environments\Door.png" />
     <Image Include="rsc\images\environments\Floor.png" />
     <Image Include="rsc\images\environments\Grass.png" />
     <Image Include="rsc\images\environments\Sand.png" />
+    <Image Include="rsc\images\environments\TestGround.png" />
     <Image Include="rsc\images\environments\Tomb.png" />
     <Image Include="rsc\images\environments\TombExterior.png" />
     <Image Include="rsc\images\environments\Wall.png" />

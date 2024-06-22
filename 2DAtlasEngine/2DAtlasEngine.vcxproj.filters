@@ -94,12 +94,6 @@
     <Image Include="rsc\minimap.png">
       <Filter>Fichiers de ressources</Filter>
     </Image>
-    <Image Include="rsc\foo.png">
-      <Filter>Fichiers de ressources</Filter>
-    </Image>
-    <Image Include="rsc\background.png">
-      <Filter>Fichiers de ressources</Filter>
-    </Image>
     <Image Include="rsc\images\characters\DrJonez.png">
       <Filter>Fichiers de ressources</Filter>
     </Image>
@@ -131,6 +125,9 @@
       <Filter>Fichiers de ressources</Filter>
     </Image>
     <Image Include="rsc\images\ui\Inventory.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="rsc\images\environments\TestGround.png">
       <Filter>Fichiers de ressources</Filter>
     </Image>
   </ItemGroup>

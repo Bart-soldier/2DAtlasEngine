@@ -15,7 +15,7 @@ namespace Game
 		std::stringstream timeText;
 		AE::Texture* text;
 
-		Ground* grass = new Ground(_graphicEngine.CreateRegularTexture("rsc/images/environments/Grass.png"));
+		Ground* grass = new Ground(_graphicEngine.CreateRegularTexture("rsc/images/environments/TestGround.png"));
 		_currentScene = new Scene(40, 20, "Main Scene", grass);
 
 		AE::Texture* minimap = _graphicEngine.CreateRegularTexture("rsc/minimap.png");
@@ -23,7 +23,7 @@ namespace Game
 		minimap->SetAlpha(192);
 
 		AE::SpriteTexture* characterTexture = _graphicEngine.CreateSpriteTexture("rsc/images/characters/DrJonez.png", 4, 4);
-		characterTexture->SetColumnIndex(2);
+		characterTexture->SetColumnIndex(0);
 		Character* character = new Character(characterTexture, 240, 190);
 
 		/*SDL_Rect spriteClips[4];
@@ -49,7 +49,7 @@ namespace Game
 
 			//_GraphicEngine.RenderTexture(character, 240, 190, &spriteClips[frame]);
 			_graphicEngine.RenderTexture(character->GetTexture(), character->GetX(), character->GetY());
-			_graphicEngine.RenderTexture(text);
+			_graphicEngine.RenderTexture(text, 0, 0, false);
 			_graphicEngine.SetViewport(AE::GraphicsEngine::Viewport::MINIMAP);
 			_graphicEngine.RenderTextureFullViewport(minimap);
 
@@ -88,13 +88,13 @@ namespace Game
 	void Application::RenderCurrentScene() {
 		for (int y = 0; y < _currentScene->_height; y++) {
 			for (int x = 0; x < _currentScene->_width; x++) {
-				GameObject* gameObject = _currentScene->GetForeground(x, y);
+				GameObject* gameObject = _currentScene->GetBackground(x, y);
 				if (gameObject != nullptr)
-					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * AE::TILE_SIZE, y * AE::TILE_SIZE);
+					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * AE::TILE_RENDER_SIZE, y * AE::TILE_RENDER_SIZE);
 
-				gameObject = _currentScene->GetBackground(x, y);
+				gameObject = _currentScene->GetForeground(x, y);
 				if (gameObject != nullptr)
-					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * AE::TILE_SIZE, y * AE::TILE_SIZE);
+					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * AE::TILE_RENDER_SIZE, y * AE::TILE_RENDER_SIZE);
 			}
 		}
 	}

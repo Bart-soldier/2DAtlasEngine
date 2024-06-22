@@ -54,8 +54,8 @@ namespace AE
 		}
 
 		_texture = texture;
-		_width = surface->w;
-		_height = surface->h;
+		_width = surface->w < TILE_SIZE ? TILE_SIZE : surface->w;
+		_height = surface->h < TILE_SIZE ? TILE_SIZE : surface->h;
 		_renderClip = { 0, 0, _width, _height };
 
 		SDL_FreeSurface(surface);
