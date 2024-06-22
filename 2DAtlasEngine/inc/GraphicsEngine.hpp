@@ -18,7 +18,7 @@ namespace AE
 			TOTAL
 		};
 
-		GraphicsEngine(int width, int height, std::string name);
+		GraphicsEngine(int width, int height, std::string name, bool VSYNC_ENABLED);
 		~GraphicsEngine();
 
 		GraphicsEngine(const GraphicsEngine&) = delete;
@@ -45,7 +45,7 @@ namespace AE
 		SDL_Rect _viewport;
 
 		bool InitializeWindow();
-		bool InitializeRenderer();
+		bool InitializeRenderer(bool VSYNC_ENABLED);
 		bool InitializeLibraries();
 	};
 }

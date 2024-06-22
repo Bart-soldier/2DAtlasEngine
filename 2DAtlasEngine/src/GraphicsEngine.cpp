@@ -2,7 +2,7 @@
 
 namespace AE
 {
-	GraphicsEngine::GraphicsEngine(int width, int height, std::string name) : _width{ width }, _height{ height }, _name{ name }
+	GraphicsEngine::GraphicsEngine(int width, int height, std::string name, bool VSYNC_ENABLED) : _width{ width }, _height{ height }, _name{ name }
 	{
 		if (!InitializeWindow())
 		{
@@ -11,7 +11,7 @@ namespace AE
 			return;
 		}
 
-		if (!InitializeRenderer())
+		if (!InitializeRenderer(VSYNC_ENABLED))
 		{
 			printf("Failed to initialize renderer!\n");
 			_shouldClose = true;
@@ -58,9 +58,11 @@ namespace AE
 		return true;
 	}
 
-	bool GraphicsEngine::InitializeRenderer()
+	bool GraphicsEngine::InitializeRenderer(bool VSYNC_ENABLED)
 	{
-		_renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+		_renderer = VSYNC_ENABLED ? SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC)
+								  : SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
+
 		if (_renderer == NULL) {
 			printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
 			return false;

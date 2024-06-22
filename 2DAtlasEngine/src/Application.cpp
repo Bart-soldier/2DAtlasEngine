@@ -33,10 +33,11 @@ namespace Game
 
 		while (!_graphicEngine._shouldClose)
 		{
+			_fpsCapTimer.Start();
 			HandleEvents();
 
 			timeText.str("");
-			timeText << "Milliseconds since start time " << _globalTimer.GetTicks();
+			timeText << "FPS: " << GetFPS();
 			text = _graphicEngine.CreateTextureFromText(_font, timeText.str().c_str(), { 0, 0, 0 });
 
 			_graphicEngine.ClearRenderer();
@@ -53,17 +54,12 @@ namespace Game
 
 			_graphicEngine.UpdateWindow();
 
+
+			++_framesCounter;
 			//frame = (frame + 1) % 4;
+
+			ManuallyCapFPS();
 		}
-	}
-
-	void Application::InitializeUtils()
-	{
-		_font = TTF_OpenFont("rsc/fonts/lazy.ttf", 28);
-		if (_font == NULL)
-			printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
-
-		_globalTimer.Start();
 	}
 
 	void Application::Shutdown()
@@ -76,6 +72,16 @@ namespace Game
 			SDL_DestroyTexture(keyImages[i]);
 			keyImages[i] = NULL;
 		}*/
+	}
+
+	void Application::InitializeUtils()
+	{
+		_font = TTF_OpenFont("rsc/fonts/lazy.ttf", 28);
+		if (_font == NULL)
+			printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
+
+		_globalTimer.Start();
+		_fpsTimer.Start();
 	}
 
 	void Application::RenderCurrentScene() {
@@ -116,6 +122,21 @@ namespace Game
 				}*/
 			}
 		}
+	}
+
+	float Application::GetFPS()
+	{
+		float fps = _framesCounter / (_fpsTimer.GetTicks() / 1000.f);
+		return fps > 2000000 ? 0 : fps;
+	}
+
+	void Application::ManuallyCapFPS()
+	{
+		if (VSYNC_ENABLED) return;
+
+		int frameTicks = _fpsCapTimer.GetTicks();
+		if (frameTicks < SCREEN_TICKS_PER_FRAME)
+			SDL_Delay(SCREEN_TICKS_PER_FRAME - frameTicks);
 	}
 
 	/*void Application::HandleKeyDownEvent(SDL_Keycode keyCode)
