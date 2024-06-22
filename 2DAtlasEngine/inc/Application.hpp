@@ -1,10 +1,12 @@
 #pragma once
 
+#include "Constants.hpp"
 #include "Timer.hpp"
 
 #include "GraphicsEngine.hpp"
 #include "Scene.hpp"
 #include "Ground.hpp"
+#include "Character.hpp"
 
 #include <sstream>
 
@@ -23,19 +25,11 @@ namespace Game {
 		};*/
 
 		public:
-			static const int WIDTH = 640;
-			static const int HEIGHT = 480;
-			static const int SCREEN_FPS = 60;
-			static const int SCREEN_TICKS_PER_FRAME = 1000 / SCREEN_FPS;
-			static const int TILE_SIZE = 16;
-
-			static const bool VSYNC_ENABLED = false;
-
 			void Run();
 			void Shutdown();
 
 		private:
-			AE::GraphicsEngine _graphicEngine { WIDTH, HEIGHT, "Atlas Engine 2.0", VSYNC_ENABLED };
+			AE::GraphicsEngine _graphicEngine { AE::WIDTH, AE::HEIGHT, "Atlas Engine 2.0" };
 			AE::Timer _globalTimer {};
 			AE::Timer _fpsTimer {};
 			AE::Timer _fpsCapTimer {};

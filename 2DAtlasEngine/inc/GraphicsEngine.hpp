@@ -1,6 +1,8 @@
 #pragma once
 
-#include "../inc/Texture.hpp"
+#include "../inc/RegularTexture.hpp"
+#include "../inc/TextTexture.hpp"
+#include "../inc/Constants.hpp"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -18,7 +20,7 @@ namespace AE
 			TOTAL
 		};
 
-		GraphicsEngine(int width, int height, std::string name, bool VSYNC_ENABLED);
+		GraphicsEngine(int width, int height, std::string name);
 		~GraphicsEngine();
 
 		GraphicsEngine(const GraphicsEngine&) = delete;
@@ -30,9 +32,9 @@ namespace AE
 		void SetViewport(Viewport viewportValue);
 		void UpdateWindow();
 
-		Texture* CreateTextureFromFile(std::string path, bool colorKeyed = false, Uint8 kred = 0, Uint8 kgreen = 0xFF, Uint8 kblue = 0xFF);
-		Texture* CreateTextureFromText(TTF_Font* font, std::string text, SDL_Color color);
-		void RenderTexture(Texture* texture, int x = 0, int y = 0, SDL_Rect* clip = NULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
+		Texture* CreateRegularTexture(std::string path, bool colorKeyed = false, Uint8 kred = 0xFF, Uint8 kgreen = 0xFF, Uint8 kblue = 0xFF);
+		Texture* CreateTextTexture(TTF_Font* font, std::string text, SDL_Color color);
+		void RenderTexture(Texture* texture, int x = 0, int y = 0, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
 		void RenderTextureFullViewport(Texture* texture);
 
 	private:
@@ -45,7 +47,7 @@ namespace AE
 		SDL_Rect _viewport;
 
 		bool InitializeWindow();
-		bool InitializeRenderer(bool VSYNC_ENABLED);
+		bool InitializeRenderer();
 		bool InitializeLibraries();
 	};
 }

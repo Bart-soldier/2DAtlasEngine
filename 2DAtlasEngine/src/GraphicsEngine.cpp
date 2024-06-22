@@ -2,7 +2,7 @@
 
 namespace AE
 {
-	GraphicsEngine::GraphicsEngine(int width, int height, std::string name, bool VSYNC_ENABLED) : _width{ width }, _height{ height }, _name{ name }
+	GraphicsEngine::GraphicsEngine(int width, int height, std::string name) : _width{ width }, _height{ height }, _name{ name }
 	{
 		if (!InitializeWindow())
 		{
@@ -11,7 +11,7 @@ namespace AE
 			return;
 		}
 
-		if (!InitializeRenderer(VSYNC_ENABLED))
+		if (!InitializeRenderer())
 		{
 			printf("Failed to initialize renderer!\n");
 			_shouldClose = true;
@@ -58,7 +58,7 @@ namespace AE
 		return true;
 	}
 
-	bool GraphicsEngine::InitializeRenderer(bool VSYNC_ENABLED)
+	bool GraphicsEngine::InitializeRenderer()
 	{
 		_renderer = VSYNC_ENABLED ? SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC)
 								  : SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
@@ -121,29 +121,23 @@ namespace AE
 		SDL_RenderPresent(_renderer);
 	}
 
-	Texture* GraphicsEngine::CreateTextureFromFile(std::string path, bool colorKeyed, Uint8 kred, Uint8 kgreen, Uint8 kblue)
+	Texture* GraphicsEngine::CreateRegularTexture(std::string path, bool colorKeyed, Uint8 kred, Uint8 kgreen, Uint8 kblue)
 	{
-		return new Texture(_renderer, path, colorKeyed, kred, kgreen, kblue);
+		return new RegularTexture(_renderer, path, colorKeyed, kred, kgreen, kblue);
 	}
 
-	Texture* GraphicsEngine::CreateTextureFromText(TTF_Font* font, std::string text, SDL_Color color)
+	Texture* GraphicsEngine::CreateTextTexture(TTF_Font* font, std::string text, SDL_Color color)
 	{
-		return new Texture(_renderer, font, text, color);
+		return new TextTexture(_renderer, font, text, color);
 	}
 
-	void GraphicsEngine::RenderTexture(Texture* texture, int x, int y, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
+	void GraphicsEngine::RenderTexture(Texture* texture, int x, int y, double angle, SDL_Point* center, SDL_RendererFlip flip)
 	{
 		if (texture != NULL)
 		{
-			SDL_Rect renderQuad = { x, y, texture->GetWidth(), texture->GetHeight()};
+			SDL_Rect renderQuad = { x, y, texture->GetRenderClip()->w, texture->GetRenderClip()->h};
 
-			if (clip != NULL)
-			{
-				renderQuad.w = clip->w;
-				renderQuad.h = clip->h;
-			}
-
-			SDL_RenderCopyEx(_renderer, texture->GetTexture(), clip, &renderQuad, angle, center, flip);
+			SDL_RenderCopyEx(_renderer, texture->GetTexture(), texture->GetRenderClip(), &renderQuad, angle, center, flip);
 		}
 	}
 

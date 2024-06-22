@@ -2,7 +2,7 @@
 
 namespace AE
 {
-	Texture::Texture(SDL_Renderer* renderer, std::string path, bool colorKeyed, Uint8 kred, Uint8 kgreen, Uint8 kblue)
+	Texture::Texture(SDL_Renderer* renderer, SDL_Surface* surface, bool colorKeyed, Uint8 kred, Uint8 kgreen, Uint8 kblue)
 	{
 		Reset();
 
@@ -11,13 +11,7 @@ namespace AE
 		_kgreen = kgreen;
 		_kblue = kblue;
 
-		LoadFromSurface(renderer, IMG_Load(path.c_str()));
-	}
-
-	Texture::Texture(SDL_Renderer* renderer, TTF_Font* font, std::string text, SDL_Color color)
-	{
-		Reset();
-		LoadFromSurface(renderer, TTF_RenderText_Solid(font, text.c_str(), color));
+		LoadFromSurface(renderer, surface);
 	}
 
 	Texture::~Texture()
@@ -33,6 +27,12 @@ namespace AE
 		_texture = NULL;
 		_width = 0;
 		_height = 0;
+		_renderClip = { 0, 0, 0, 0 };
+
+		_colorKeyed = false;
+		_kred = 0xFF;
+		_kblue = 0xFF;
+		_kgreen = 0xFF;
 	}
 
 	bool Texture::LoadFromSurface(SDL_Renderer* renderer, SDL_Surface* surface)
@@ -56,6 +56,7 @@ namespace AE
 		_texture = texture;
 		_width = surface->w;
 		_height = surface->h;
+		_renderClip = { 0, 0, _width, _height };
 
 		SDL_FreeSurface(surface);
 
@@ -82,13 +83,18 @@ namespace AE
 		return _texture;
 	}
 
-	int Texture::GetWidth() const
+	int Texture::GetWidth()
 	{
 		return _width;
 	}
 
-	int Texture::GetHeight() const
+	int Texture::GetHeight()
 	{
 		return _height;
+	}
+
+	SDL_Rect* Texture::GetRenderClip()
+	{
+		return &_renderClip;
 	}
 }

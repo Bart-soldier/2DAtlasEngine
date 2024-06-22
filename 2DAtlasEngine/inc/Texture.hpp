@@ -9,8 +9,7 @@ namespace AE
 	class Texture
 	{
 	public:
-		Texture(SDL_Renderer* renderer, std::string path, bool colorKeyed, Uint8 kred, Uint8 kgreen, Uint8 kblue);
-		Texture(SDL_Renderer* renderer, TTF_Font* font, std::string text, SDL_Color color);
+		Texture(SDL_Renderer* renderer, SDL_Surface* surfacebool, bool colorKeyed, Uint8 kred, Uint8 kgreen, Uint8 kblue);
 		~Texture();
 
 		void SetColor(Uint8 red, Uint8 green, Uint8 blue);
@@ -18,13 +17,17 @@ namespace AE
 		void SetAlpha(Uint8 alpha);
 
 		SDL_Texture* GetTexture();
-		int GetWidth() const;
-		int GetHeight() const;
+		int GetWidth();
+		int GetHeight();
+		SDL_Rect* GetRenderClip();
 
-	private:
+	protected:
 		SDL_Texture* _texture;
 		int _width;
 		int _height;
+		SDL_Rect _renderClip;
+
+	private:
 		bool _colorKeyed;
 		Uint8 _kred;
 		Uint8 _kgreen;

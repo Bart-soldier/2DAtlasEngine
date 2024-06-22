@@ -15,15 +15,15 @@ namespace Game
 		std::stringstream timeText;
 		AE::Texture* text;
 
-		AE::Texture* grassTexture = _graphicEngine.CreateTextureFromFile("rsc/images/environments/Grass.png");
-		Ground* grass = new Ground(grassTexture);
+		Ground* grass = new Ground(_graphicEngine.CreateRegularTexture("rsc/images/environments/Grass.png"));
 		_currentScene = new Scene(40, 20, "Main Scene", grass);
 
-		AE::Texture* minimap = _graphicEngine.CreateTextureFromFile("rsc/minimap.png");
+		AE::Texture* minimap = _graphicEngine.CreateRegularTexture("rsc/minimap.png");
 		minimap->SetBlendMode();
 		minimap->SetAlpha(192);
 
-		AE::Texture* character = _graphicEngine.CreateTextureFromFile("rsc/images/characters/DrJonez.png");
+		Character* character = new Character(_graphicEngine.CreateRegularTexture("rsc/images/characters/DrJonez.png"), 240, 190);
+
 		/*SDL_Rect spriteClips[4];
 		spriteClips[0] = { 0, 64, TILE_SIZE, 2 * TILE_SIZE };
 		spriteClips[1] = { TILE_SIZE, 64, TILE_SIZE, 2 * TILE_SIZE };
@@ -38,7 +38,7 @@ namespace Game
 
 			timeText.str("");
 			timeText << "FPS: " << GetFPS();
-			text = _graphicEngine.CreateTextureFromText(_font, timeText.str().c_str(), { 0, 0, 0 });
+			text = _graphicEngine.CreateTextTexture(_font, timeText.str().c_str(), { 0, 0, 0 });
 
 			_graphicEngine.ClearRenderer();
 			_graphicEngine.SetViewport(AE::GraphicsEngine::Viewport::FULLSCREEN);
@@ -46,8 +46,7 @@ namespace Game
 			RenderCurrentScene();
 
 			//_GraphicEngine.RenderTexture(character, 240, 190, &spriteClips[frame]);
-			_graphicEngine.RenderTexture(character, 240, 190);
-
+			_graphicEngine.RenderTexture(character->GetTexture(), character->GetX(), character->GetY());
 			_graphicEngine.RenderTexture(text);
 			_graphicEngine.SetViewport(AE::GraphicsEngine::Viewport::MINIMAP);
 			_graphicEngine.RenderTextureFullViewport(minimap);
@@ -89,11 +88,11 @@ namespace Game
 			for (int x = 0; x < _currentScene->_width; x++) {
 				GameObject* gameObject = _currentScene->GetForeground(x, y);
 				if (gameObject != nullptr)
-					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * TILE_SIZE, y * TILE_SIZE);
+					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * AE::TILE_SIZE, y * AE::TILE_SIZE);
 
 				gameObject = _currentScene->GetBackground(x, y);
 				if (gameObject != nullptr)
-					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * TILE_SIZE, y * TILE_SIZE);
+					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * AE::TILE_SIZE, y * AE::TILE_SIZE);
 			}
 		}
 	}
@@ -132,11 +131,11 @@ namespace Game
 
 	void Application::ManuallyCapFPS()
 	{
-		if (VSYNC_ENABLED) return;
+		if (AE::VSYNC_ENABLED) return;
 
 		int frameTicks = _fpsCapTimer.GetTicks();
-		if (frameTicks < SCREEN_TICKS_PER_FRAME)
-			SDL_Delay(SCREEN_TICKS_PER_FRAME - frameTicks);
+		if (frameTicks < AE::SCREEN_TICKS_PER_FRAME)
+			SDL_Delay(AE::SCREEN_TICKS_PER_FRAME - frameTicks);
 	}
 
 	/*void Application::HandleKeyDownEvent(SDL_Keycode keyCode)
