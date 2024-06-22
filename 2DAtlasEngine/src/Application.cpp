@@ -10,20 +10,20 @@ namespace Game
 		keyImages[KEY_PRESS_SURFACE_LEFT] = _AEWindow.LoadTexture("rsc/left.bmp");
 		keyImages[KEY_PRESS_SURFACE_RIGHT] = _AEWindow.LoadTexture("rsc/right.bmp");*/
 
-		_font = TTF_OpenFont("rsc/fonts/lazy.ttf", 28);
-		if (_font == NULL)
-			printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
-		AE::Texture* text = _GraphicEngine.CreateTextureFromText(_font, "FPS: ", { 0, 0, 0 });
+		InitializeUtils();
 
-		AE::Texture* grassTexture = _GraphicEngine.CreateTextureFromFile("rsc/images/environments/Grass.png");
+		std::stringstream timeText;
+		AE::Texture* text;
+
+		AE::Texture* grassTexture = _graphicEngine.CreateTextureFromFile("rsc/images/environments/Grass.png");
 		Ground* grass = new Ground(grassTexture);
 		_currentScene = new Scene(40, 20, "Main Scene", grass);
 
-		AE::Texture* minimap = _GraphicEngine.CreateTextureFromFile("rsc/minimap.png");
+		AE::Texture* minimap = _graphicEngine.CreateTextureFromFile("rsc/minimap.png");
 		minimap->SetBlendMode();
 		minimap->SetAlpha(192);
 
-		AE::Texture* character = _GraphicEngine.CreateTextureFromFile("rsc/images/characters/DrJonez.png");
+		AE::Texture* character = _graphicEngine.CreateTextureFromFile("rsc/images/characters/DrJonez.png");
 		/*SDL_Rect spriteClips[4];
 		spriteClips[0] = { 0, 64, TILE_SIZE, 2 * TILE_SIZE };
 		spriteClips[1] = { TILE_SIZE, 64, TILE_SIZE, 2 * TILE_SIZE };
@@ -31,26 +31,39 @@ namespace Game
 		spriteClips[3] = { 3 * TILE_SIZE, 64, TILE_SIZE, 2 * TILE_SIZE };
 		int frame = 0;*/
 
-		while (!_GraphicEngine._shouldClose)
+		while (!_graphicEngine._shouldClose)
 		{
 			HandleEvents();
 
-			_GraphicEngine.ClearRenderer();
-			_GraphicEngine.SetViewport(AE::GraphicsEngine::Viewport::FULLSCREEN);
+			timeText.str("");
+			timeText << "Milliseconds since start time " << _globalTimer.GetTicks();
+			text = _graphicEngine.CreateTextureFromText(_font, timeText.str().c_str(), { 0, 0, 0 });
+
+			_graphicEngine.ClearRenderer();
+			_graphicEngine.SetViewport(AE::GraphicsEngine::Viewport::FULLSCREEN);
 
 			RenderCurrentScene();
 
 			//_GraphicEngine.RenderTexture(character, 240, 190, &spriteClips[frame]);
-			_GraphicEngine.RenderTexture(character, 240, 190);
+			_graphicEngine.RenderTexture(character, 240, 190);
 
-			_GraphicEngine.RenderTexture(text);
-			_GraphicEngine.SetViewport(AE::GraphicsEngine::Viewport::MINIMAP);
-			_GraphicEngine.RenderTextureFullViewport(minimap);
+			_graphicEngine.RenderTexture(text);
+			_graphicEngine.SetViewport(AE::GraphicsEngine::Viewport::MINIMAP);
+			_graphicEngine.RenderTextureFullViewport(minimap);
 
-			_GraphicEngine.UpdateWindow();
+			_graphicEngine.UpdateWindow();
 
 			//frame = (frame + 1) % 4;
 		}
+	}
+
+	void Application::InitializeUtils()
+	{
+		_font = TTF_OpenFont("rsc/fonts/lazy.ttf", 28);
+		if (_font == NULL)
+			printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
+
+		_globalTimer.Start();
 	}
 
 	void Application::Shutdown()
@@ -70,11 +83,11 @@ namespace Game
 			for (int x = 0; x < _currentScene->_width; x++) {
 				GameObject* gameObject = _currentScene->GetForeground(x, y);
 				if (gameObject != nullptr)
-					_GraphicEngine.RenderTexture(gameObject->GetTexture(), x * TILE_SIZE, y * TILE_SIZE);
+					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * TILE_SIZE, y * TILE_SIZE);
 
 				gameObject = _currentScene->GetBackground(x, y);
 				if (gameObject != nullptr)
-					_GraphicEngine.RenderTexture(gameObject->GetTexture(), x * TILE_SIZE, y * TILE_SIZE);
+					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * TILE_SIZE, y * TILE_SIZE);
 			}
 		}
 	}
@@ -95,7 +108,7 @@ namespace Game
 		{
 			switch (event.type) {
 				case SDL_QUIT:
-					_GraphicEngine._shouldClose = true;
+					_graphicEngine._shouldClose = true;
 					return;
 				/*case SDL_KEYDOWN:
 					HandleKeyDownEvent(event.key.keysym.sym);

@@ -27,6 +27,7 @@
     <ClCompile Include="src\GraphicsEngine.cpp" />
     <ClCompile Include="src\Application.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Timer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Character.hpp" />
@@ -36,6 +37,7 @@
     <ClInclude Include="inc\Texture.hpp" />
     <ClInclude Include="inc\GraphicsEngine.hpp" />
     <ClInclude Include="inc\Application.hpp" />
+    <ClInclude Include="inc\Timer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="rsc\background.png" />

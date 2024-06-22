@@ -1,8 +1,12 @@
 #pragma once
 
+#include "Timer.hpp"
+
 #include "GraphicsEngine.hpp"
 #include "Scene.hpp"
 #include "Ground.hpp"
+
+#include <sstream>
 
 namespace Game {
 
@@ -27,9 +31,12 @@ namespace Game {
 			void Shutdown();
 
 		private:
-			AE::GraphicsEngine _GraphicEngine{ WIDTH, HEIGHT, "Atlas Engine 2.0" };
+			AE::GraphicsEngine _graphicEngine { WIDTH, HEIGHT, "Atlas Engine 2.0" };
+			AE::Timer _globalTimer {};
 			Scene* _currentScene = NULL;
 			TTF_Font* _font = NULL;
+
+			void InitializeUtils();
 
 			void RenderCurrentScene();
 			void RenderCurrentCharacters();
