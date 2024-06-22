@@ -121,12 +121,17 @@ namespace AE
 		SDL_RenderPresent(_renderer);
 	}
 
-	Texture* GraphicsEngine::CreateRegularTexture(std::string path, bool colorKeyed, Uint8 kred, Uint8 kgreen, Uint8 kblue)
+	RegularTexture* GraphicsEngine::CreateRegularTexture(std::string path, bool colorKeyed, Uint8 kred, Uint8 kgreen, Uint8 kblue)
 	{
 		return new RegularTexture(_renderer, path, colorKeyed, kred, kgreen, kblue);
 	}
 
-	Texture* GraphicsEngine::CreateTextTexture(TTF_Font* font, std::string text, SDL_Color color)
+	SpriteTexture* GraphicsEngine::CreateSpriteTexture(std::string path, int lineNb, int columnNb, bool colorKeyed, Uint8 kred, Uint8 kgreen, Uint8 kblue)
+	{
+		return new SpriteTexture(_renderer, path, lineNb, columnNb, colorKeyed, kred, kgreen, kblue);
+	}
+
+	TextTexture* GraphicsEngine::CreateTextTexture(TTF_Font* font, std::string text, SDL_Color color)
 	{
 		return new TextTexture(_renderer, font, text, color);
 	}

@@ -22,7 +22,9 @@ namespace Game
 		minimap->SetBlendMode();
 		minimap->SetAlpha(192);
 
-		Character* character = new Character(_graphicEngine.CreateRegularTexture("rsc/images/characters/DrJonez.png"), 240, 190);
+		AE::SpriteTexture* characterTexture = _graphicEngine.CreateSpriteTexture("rsc/images/characters/DrJonez.png", 4, 4);
+		characterTexture->SetColumnIndex(2);
+		Character* character = new Character(characterTexture, 240, 190);
 
 		/*SDL_Rect spriteClips[4];
 		spriteClips[0] = { 0, 64, TILE_SIZE, 2 * TILE_SIZE };
