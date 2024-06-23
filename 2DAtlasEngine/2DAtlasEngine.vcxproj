@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\PhysicsEngine.cpp" />
     <ClCompile Include="src\RegularTexture.cpp" />
     <ClCompile Include="src\SpriteTexture.cpp" />
     <ClCompile Include="src\Character.cpp" />
@@ -45,6 +46,7 @@
     <ClInclude Include="inc\TextTexture.hpp" />
     <ClInclude Include="inc\RegularTexture.hpp" />
     <ClInclude Include="inc\SpriteTexture.hpp" />
+    <ClInclude Include="inc\PhysicsEngine.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="rsc\images\characters\DrJonez.png" />

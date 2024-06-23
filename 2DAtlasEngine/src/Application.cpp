@@ -1,65 +1,50 @@
 #include "../inc/Application.hpp"
 
-namespace Game
+namespace AE
 {
 	void Application::Run()
 	{
-		/*keyImages[KEY_PRESS_SURFACE_DEFAULT] = _AEWindow.LoadTexture("rsc/press.png");
-		keyImages[KEY_PRESS_SURFACE_UP] = _AEWindow.LoadTexture("rsc/up.bmp");
-		keyImages[KEY_PRESS_SURFACE_DOWN] = _AEWindow.LoadTexture("rsc/down.bmp");
-		keyImages[KEY_PRESS_SURFACE_LEFT] = _AEWindow.LoadTexture("rsc/left.bmp");
-		keyImages[KEY_PRESS_SURFACE_RIGHT] = _AEWindow.LoadTexture("rsc/right.bmp");*/
-
 		InitializeUtils();
 
 		std::stringstream timeText;
-		AE::Texture* text;
+		Texture* text;
 
 		Ground* grass = new Ground(_graphicEngine.CreateRegularTexture("rsc/images/environments/TestGround.png"));
-		_currentScene = new Scene(40, 20, "Main Scene", grass);
+		_currentScene = new Scene(20, 10, "Main Scene", grass);
 
-		AE::Texture* minimap = _graphicEngine.CreateRegularTexture("rsc/minimap.png");
+		Texture* minimap = _graphicEngine.CreateRegularTexture("rsc/minimap.png");
 		minimap->SetBlendMode();
 		minimap->SetAlpha(192);
 
-		AE::SpriteTexture* characterTexture = _graphicEngine.CreateSpriteTexture("rsc/images/characters/DrJonez.png", 4, 4);
+		SpriteTexture* characterTexture = _graphicEngine.CreateSpriteTexture("rsc/images/characters/DrJonez.png", 4, 4);
 		characterTexture->SetColumnIndex(0);
-		Character* character = new Character(characterTexture, 240, 190);
+		_player = new Character(characterTexture, 240, 190, 64);
+		_player->_boundingBox = { 2 * TILE_RENDER_FACTOR, 4 * TILE_RENDER_FACTOR, TILE_RENDER_SIZE - 4 * TILE_RENDER_FACTOR, TILE_RENDER_SIZE * 2 - 4 * TILE_RENDER_FACTOR };
 
-		/*SDL_Rect spriteClips[4];
-		spriteClips[0] = { 0, 64, TILE_SIZE, 2 * TILE_SIZE };
-		spriteClips[1] = { TILE_SIZE, 64, TILE_SIZE, 2 * TILE_SIZE };
-		spriteClips[2] = { 2 * TILE_SIZE, 64, TILE_SIZE, 2 * TILE_SIZE };
-		spriteClips[3] = { 3 * TILE_SIZE, 64, TILE_SIZE, 2 * TILE_SIZE };
-		int frame = 0;*/
+		//_player = new Character(_graphicEngine.CreateRegularTexture("rsc/images/environments/Sand.png"), 240, 190, 5);
+
+		_currentScene->AddCharacter(_player);
 
 		while (!_graphicEngine._shouldClose)
 		{
-			_fpsCapTimer.Start();
+			StartFrame();
+
 			HandleEvents();
 
 			timeText.str("");
 			timeText << "FPS: " << GetFPS();
 			text = _graphicEngine.CreateTextTexture(_font, timeText.str().c_str(), { 0, 0, 0 });
 
-			_graphicEngine.ClearRenderer();
-			_graphicEngine.SetViewport(AE::GraphicsEngine::Viewport::FULLSCREEN);
+			_physicsEngine.MoveCharacters(_currentScene);
+			_physicsEngine._deltaTime.Start();
 
 			RenderCurrentScene();
 
-			//_GraphicEngine.RenderTexture(character, 240, 190, &spriteClips[frame]);
-			_graphicEngine.RenderTexture(character->GetTexture(), character->GetX(), character->GetY());
 			_graphicEngine.RenderTexture(text, 0, 0, false);
-			_graphicEngine.SetViewport(AE::GraphicsEngine::Viewport::MINIMAP);
+			_graphicEngine.SetViewport(GraphicsEngine::Viewport::MINIMAP);
 			_graphicEngine.RenderTextureFullViewport(minimap);
 
-			_graphicEngine.UpdateWindow();
-
-
-			++_framesCounter;
-			//frame = (frame + 1) % 4;
-
-			ManuallyCapFPS();
+			EndFrame();
 		}
 	}
 
@@ -67,12 +52,6 @@ namespace Game
 	{
 		TTF_CloseFont(_font);
 		_font = NULL;
-
-		/*for (int i = 0; i < KEY_PRESS_SURFACE_TOTAL; ++i)
-		{
-			SDL_DestroyTexture(keyImages[i]);
-			keyImages[i] = NULL;
-		}*/
 	}
 
 	void Application::InitializeUtils()
@@ -85,17 +64,36 @@ namespace Game
 		_fpsTimer.Start();
 	}
 
+	void Application::StartFrame()
+	{
+		_fpsCapTimer.Start();
+		_graphicEngine.ClearRenderer();
+		_graphicEngine.SetViewport(GraphicsEngine::Viewport::FULLSCREEN);
+	}
+
+	void Application::EndFrame()
+	{
+		_graphicEngine.UpdateWindow();
+		++_framesCounter;
+		ManuallyCapFPS();
+	}
+
 	void Application::RenderCurrentScene() {
 		for (int y = 0; y < _currentScene->_height; y++) {
 			for (int x = 0; x < _currentScene->_width; x++) {
 				GameObject* gameObject = _currentScene->GetBackground(x, y);
 				if (gameObject != nullptr)
-					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * AE::TILE_RENDER_SIZE, y * AE::TILE_RENDER_SIZE);
+					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * TILE_RENDER_SIZE, y * TILE_RENDER_SIZE);
 
 				gameObject = _currentScene->GetForeground(x, y);
 				if (gameObject != nullptr)
-					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * AE::TILE_RENDER_SIZE, y * AE::TILE_RENDER_SIZE);
+					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * TILE_RENDER_SIZE, y * TILE_RENDER_SIZE);
 			}
+		}
+
+		for (Character* character : _currentScene->GetCharacters())
+		{
+			_graphicEngine.RenderTexture(character->GetTexture(), character->GetX(), character->GetY());
 		}
 	}
 
@@ -107,24 +105,6 @@ namespace Game
 
 	}
 
-	void Application::HandleEvents()
-	{
-		SDL_Event event;
-
-		while (SDL_PollEvent(&event) != 0)
-		{
-			switch (event.type) {
-				case SDL_QUIT:
-					_graphicEngine._shouldClose = true;
-					return;
-				/*case SDL_KEYDOWN:
-					HandleKeyDownEvent(event.key.keysym.sym);
-					break;
-				}*/
-			}
-		}
-	}
-
 	float Application::GetFPS()
 	{
 		float fps = _framesCounter / (_fpsTimer.GetTicks() / 1000.f);
@@ -133,36 +113,52 @@ namespace Game
 
 	void Application::ManuallyCapFPS()
 	{
-		if (AE::VSYNC_ENABLED) return;
+		if (VSYNC_ENABLED) return;
 
 		int frameTicks = _fpsCapTimer.GetTicks();
-		if (frameTicks < AE::SCREEN_TICKS_PER_FRAME)
-			SDL_Delay(AE::SCREEN_TICKS_PER_FRAME - frameTicks);
+		if (frameTicks < SCREEN_TICKS_PER_FRAME)
+			SDL_Delay(SCREEN_TICKS_PER_FRAME - frameTicks);
 	}
 
-	/*void Application::HandleKeyDownEvent(SDL_Keycode keyCode)
+	void Application::HandleEvents()
+	{
+		SDL_Event event;
+
+		while (SDL_PollEvent(&event) != 0)
+		{
+			switch (event.type) {
+			case SDL_QUIT:
+				_graphicEngine._shouldClose = true;
+				return;
+			case SDL_KEYDOWN:
+				if (event.key.repeat == 0) HandleKeyDownEvent(event.key.keysym.sym);
+				break;
+			case SDL_KEYUP:
+				if (event.key.repeat == 0) HandleKeyUpEvent(event.key.keysym.sym);
+				break;
+			}
+		}
+	}
+
+	void Application::HandleKeyDownEvent(SDL_Keycode keyCode)
 	{
 		switch (keyCode)
 		{
-			case SDLK_UP:
-				_lastSurface = KEY_PRESS_SURFACE_UP;
-				break;
-
-			case SDLK_DOWN:
-				_lastSurface = KEY_PRESS_SURFACE_DOWN;
-				break;
-
-			case SDLK_LEFT:
-				_lastSurface = KEY_PRESS_SURFACE_LEFT;
-				break;
-
-			case SDLK_RIGHT:
-				_lastSurface = KEY_PRESS_SURFACE_RIGHT;
-				break;
-
-			default:
-				_lastSurface = KEY_PRESS_SURFACE_DEFAULT;
-				break;
+			case SDLK_UP: _player->StartMoving(UP); break;
+			case SDLK_DOWN: _player->StartMoving(DOWN); break;
+			case SDLK_LEFT: _player->StartMoving(LEFT); break;
+			case SDLK_RIGHT: _player->StartMoving(RIGHT); break;
 		}
-	}*/
+	}
+
+	void Application::HandleKeyUpEvent(SDL_Keycode keyCode)
+	{
+		switch (keyCode)
+		{
+			case SDLK_UP: _player->StopMoving(UP); break;
+			case SDLK_DOWN: _player->StopMoving(DOWN); break;
+			case SDLK_LEFT: _player->StopMoving(LEFT); break;
+			case SDLK_RIGHT: _player->StopMoving(RIGHT); break;
+		}
+	}
 }

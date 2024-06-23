@@ -2,12 +2,25 @@
 
 #include "../inc/GameObject.hpp"
 
-namespace Game {
+namespace AE {
 
 	class Character : public GameObject
 	{
 	public:
-		Character(AE::Texture* texture, int x, int y);
+		Character(Texture* texture, int x, int y, int speed);
 		~Character();
+
+		float _desiredX;
+		float _desiredY;
+
+		void StartMoving(Direction direction);
+		void StopMoving(Direction direction);
+		bool Move(Uint32 deltaTime);
+		void ConfirmMove();
+
+	private:
+		int _speed;
+		int _speedX;
+		int _speedY;
 	};
 }

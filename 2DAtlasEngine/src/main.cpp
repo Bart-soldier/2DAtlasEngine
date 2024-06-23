@@ -6,7 +6,7 @@
 
 int main(int argc, char* args[])
 {
-	Game::Application _application{};
+	AE::Application _application{};
 
 	try
 	{

@@ -1,8 +1,8 @@
 #include "../inc/Ground.hpp"
 
-namespace Game
+namespace AE
 {
-	Ground::Ground(AE::Texture* texture) : GameObject(texture)
+	Ground::Ground(Texture* texture) : GameObject(texture)
 	{
 	}
 

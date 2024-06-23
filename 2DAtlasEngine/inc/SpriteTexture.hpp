@@ -10,6 +10,8 @@ namespace AE {
 		SpriteTexture(SDL_Renderer* renderer, std::string path, int lineNb, int columnNb, bool colorKeyed, Uint8 kred, Uint8 kgreen, Uint8 kblue);
 		~SpriteTexture();
 
+		int GetWidth() override;
+		int GetHeight() override;
 		void SetLineIndex(int lineIndex);
 		void SetColumnIndex(int columnIndex);
 

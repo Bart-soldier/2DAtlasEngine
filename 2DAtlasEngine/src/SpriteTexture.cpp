@@ -15,6 +15,17 @@ namespace AE
 
 	SpriteTexture::~SpriteTexture()
 	{
+		Reset();
+	}
+
+	int SpriteTexture::GetWidth()
+	{
+		return _elementWidth;
+	}
+
+	int SpriteTexture::GetHeight()
+	{
+		return _elementHeight;
 	}
 
 	void SpriteTexture::SetLineIndex(int lineIndex)

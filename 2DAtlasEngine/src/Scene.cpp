@@ -1,6 +1,6 @@
 #include "../inc/Scene.hpp"
 
-namespace Game
+namespace AE
 {
 	Scene::Scene(int width, int height, std::string name, GameObject* background) : _width{ width }, _height{ height }, _name{ name }
 	{
@@ -21,6 +21,11 @@ namespace Game
 		return _sceneElements->at(y * _width + x).second;
 	}
 
+	std::vector<Character*> Scene::GetCharacters()
+	{
+		return _characters;
+	}
+
 	void Scene::SetBackground(int x, int y, GameObject* gameObject)
 	{
 		_sceneElements->at(y * _width + x).first = gameObject;
@@ -30,4 +35,15 @@ namespace Game
 	{
 		_sceneElements->at(y * _width + x).second = gameObject;
 	}
+
+	void Scene::AddCharacter(Character* character)
+	{
+		_characters.push_back(character);
+	}
+
+	void Scene::RemoveCharacter(Character* character)
+	{
+		_characters.erase(std::remove(_characters.begin(), _characters.end(), character), _characters.end());
+	}
+
 }

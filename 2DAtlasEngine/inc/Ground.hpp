@@ -2,12 +2,12 @@
 
 #include "../inc/GameObject.hpp"
 
-namespace Game {
+namespace AE {
 
 	class Ground : public GameObject
 	{
 	public:
-		Ground(AE::Texture* texture);
+		Ground(Texture* texture);
 		~Ground();
 	};
 }

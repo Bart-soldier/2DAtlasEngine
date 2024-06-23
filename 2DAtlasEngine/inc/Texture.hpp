@@ -19,8 +19,8 @@ namespace AE
 		void SetAlpha(Uint8 alpha);
 
 		SDL_Texture* GetTexture();
-		int GetWidth();
-		int GetHeight();
+		virtual int GetWidth();
+		virtual int GetHeight();
 		SDL_Rect* GetRenderClip();
 
 	protected:
@@ -28,6 +28,7 @@ namespace AE
 		int _width;
 		int _height;
 		SDL_Rect _renderClip;
+		void Reset();
 
 	private:
 		bool _colorKeyed;
@@ -36,6 +37,5 @@ namespace AE
 		Uint8 _kblue;
 
 		bool LoadFromSurface(SDL_Renderer* renderer, SDL_Surface* surface);
-		void Reset();
 	};
 }

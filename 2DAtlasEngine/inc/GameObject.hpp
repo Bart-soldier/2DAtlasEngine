@@ -1,22 +1,29 @@
 #pragma once
 
 #include "../inc/Texture.hpp"
+#include "../inc/SpriteTexture.hpp"
 
-namespace Game {
+#include <typeinfo>
+
+namespace AE {
 
 	class GameObject
 	{
 	public:
-		GameObject(AE::Texture* texture = NULL, int x = 0, int y = 0);
+		GameObject(Texture* texture = NULL, int x = 0, int y = 0);
 		~GameObject();
 
-		AE::Texture* GetTexture();
+		SDL_Rect _boundingBox;
+
+		Texture* GetTexture();
 		int GetX();
 		int GetY();
 
+	protected:
+		float _posX;
+		float _posY;
+
 	private:
-		AE::Texture* _texture;
-		int _x;
-		int _y;
+		Texture* _texture;
 	};
 }
