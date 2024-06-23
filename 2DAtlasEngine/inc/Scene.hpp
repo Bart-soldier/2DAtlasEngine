@@ -6,8 +6,9 @@
 #include <vector>
 #include <string>
 
-namespace AE {
-
+namespace AE
+{
+	/// <summary>A scene represents a level as a grid.</summary>
 	class Scene
 	{
 	public:

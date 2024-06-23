@@ -18,7 +18,7 @@ namespace AE
 
 		SpriteTexture* characterTexture = _graphicEngine.CreateSpriteTexture("rsc/images/characters/DrJonez.png", 4, 4);
 		characterTexture->SetColumnIndex(0);
-		_player = new Character(characterTexture, 240, 190, 64);
+		_player = new Character(characterTexture, 240, 190, 2 * TILE_RENDER_SIZE);
 		_player->_boundingBox = { 2 * TILE_RENDER_FACTOR, 4 * TILE_RENDER_FACTOR, TILE_RENDER_SIZE - 4 * TILE_RENDER_FACTOR, TILE_RENDER_SIZE * 2 - 4 * TILE_RENDER_FACTOR };
 
 		//_player = new Character(_graphicEngine.CreateRegularTexture("rsc/images/environments/Sand.png"), 240, 190, 5);

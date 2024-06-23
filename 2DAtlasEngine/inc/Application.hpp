@@ -11,12 +11,15 @@
 
 #include <sstream>
 
-namespace AE {
-
+namespace AE
+{
+	/// <summary>The application controls the overall behavior of the program.</summary>
 	class Application
 	{
 		public:
+			/// <summary>Initializes the applications and initiates the game loop.</summary>
 			void Run();
+			/// <summary>Closes the application and destroys its content.</summary>
 			void Shutdown();
 
 		private:
@@ -45,10 +48,5 @@ namespace AE {
 			void HandleEvents();
 			void HandleKeyDownEvent(SDL_Keycode keyCode);
 			void HandleKeyUpEvent(SDL_Keycode keyCode);
-
-			/*void HandleKeyDownEvent(SDL_Keycode keyCode);
-
-			SDL_Texture* keyImages[KEY_PRESS_SURFACE_TOTAL];
-			KeyPressSurfaces _lastSurface;*/
 	};
 }
