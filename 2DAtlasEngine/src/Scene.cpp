@@ -11,14 +11,32 @@ namespace AE
 	{
 	}
 
-	GameObject* Scene::GetBackground(int x, int y)
+	GameObject* Scene::GetBackgroundInGrid(int x, int y)
 	{
-		return _sceneElements->at(y * _width + x).first;
+		return (x < 0 || x >= _width || y < 0 || y >= _height) ?
+			nullptr : _sceneElements->at(y * _width + x).first;
 	}
 
-	GameObject* Scene::GetForeground(int x, int y)
+	GameObject* Scene::GetForegroundInGrid(int x, int y)
 	{
-		return _sceneElements->at(y * _width + x).second;
+		return (x < 0 || x >= _width || y < 0 || y >= _height) ?
+			nullptr : _sceneElements->at(y * _width + x).second;
+	}
+
+	GameObject* Scene::GetBackgroundInPixel(int x, int y)
+	{
+		int gridX = (x / TILE_RENDER_SIZE);
+		int gridY = (y / TILE_RENDER_SIZE);
+		return (gridX < 0 || gridX >= _width || gridY < 0 || gridY >= _height) ?
+			nullptr : _sceneElements->at(gridY * _width + gridX).first;
+	}
+
+	GameObject* Scene::GetForegroundInPixel(int x, int y)
+	{
+		int gridX = (x / TILE_RENDER_SIZE);
+		int gridY = (y / TILE_RENDER_SIZE);
+		return (gridX < 0 || gridX >= _width || gridY < 0 || gridY >= _height) ?
+			nullptr : _sceneElements->at(gridY * _width + gridX).second;
 	}
 
 	std::vector<Character*> Scene::GetCharacters()
@@ -26,14 +44,32 @@ namespace AE
 		return _characters;
 	}
 
-	void Scene::SetBackground(int x, int y, GameObject* gameObject)
+	void Scene::SetBackgroundInGrid(int x, int y, GameObject* gameObject)
 	{
-		_sceneElements->at(y * _width + x).first = gameObject;
+		if (!(x < 0 || x >= _width || y < 0 || y >= _height))
+			_sceneElements->at(y * _width + x).first = gameObject;
 	}
 
-	void Scene::SetForeground(int x, int y, GameObject* gameObject)
+	void Scene::SetForegroundInGrid(int x, int y, GameObject* gameObject)
 	{
-		_sceneElements->at(y * _width + x).second = gameObject;
+		if (!(x < 0 || x >= _width || y < 0 || y >= _height))
+			_sceneElements->at(y * _width + x).second = gameObject;
+	}
+
+	void Scene::SetBackgroundInPixel(int x, int y, GameObject* gameObject)
+	{
+		int gridX = (x / TILE_RENDER_SIZE);
+		int gridY = (y / TILE_RENDER_SIZE);
+		if (!(gridX < 0 || gridX >= _width || gridY < 0 || gridY >= _height))
+			_sceneElements->at(gridY * _width + gridX).first = gameObject;
+	}
+
+	void Scene::SetForegroundInPixel(int x, int y, GameObject* gameObject)
+	{
+		int gridX = (x / TILE_RENDER_SIZE);
+		int gridY = (y / TILE_RENDER_SIZE);
+		if (!(gridX < 0 || gridX >= _width || gridY < 0 || gridY >= _height))
+			_sceneElements->at(gridY * _width + gridX).second = gameObject;
 	}
 
 	void Scene::AddCharacter(Character* character)

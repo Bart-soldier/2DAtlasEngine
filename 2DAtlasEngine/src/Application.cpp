@@ -25,6 +25,8 @@ namespace AE
 
 		_currentScene->AddCharacter(_player);
 
+		_overlay = new Ground(_graphicEngine.CreateRegularTexture("rsc/images/environments/overlay.png"));
+
 		while (!_graphicEngine._shouldClose)
 		{
 			StartFrame();
@@ -81,11 +83,11 @@ namespace AE
 	void Application::RenderCurrentScene() {
 		for (int y = 0; y < _currentScene->_height; y++) {
 			for (int x = 0; x < _currentScene->_width; x++) {
-				GameObject* gameObject = _currentScene->GetBackground(x, y);
+				GameObject* gameObject = _currentScene->GetBackgroundInGrid(x, y);
 				if (gameObject != nullptr)
 					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * TILE_RENDER_SIZE, y * TILE_RENDER_SIZE);
 
-				gameObject = _currentScene->GetForeground(x, y);
+				gameObject = _currentScene->GetForegroundInGrid(x, y);
 				if (gameObject != nullptr)
 					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * TILE_RENDER_SIZE, y * TILE_RENDER_SIZE);
 			}
@@ -130,6 +132,10 @@ namespace AE
 			case SDL_QUIT:
 				_graphicEngine._shouldClose = true;
 				return;
+			case SDL_MOUSEMOTION:
+				int x, y;
+				SDL_GetMouseState(&x, &y);
+				HandleMouseMotion(x, y);
 			case SDL_KEYDOWN:
 				if (event.key.repeat == 0) HandleKeyDownEvent(event.key.keysym.sym);
 				break;
@@ -138,6 +144,11 @@ namespace AE
 				break;
 			}
 		}
+	}
+
+	void Application::HandleMouseMotion(int x, int y)
+	{
+		_currentScene->SetForegroundInPixel(x, y, _overlay);
 	}
 
 	void Application::HandleKeyDownEvent(SDL_Keycode keyCode)

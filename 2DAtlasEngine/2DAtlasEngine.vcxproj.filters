@@ -136,6 +136,9 @@
     <Image Include="rsc\images\environments\TestGround.png">
       <Filter>Fichiers de ressources</Filter>
     </Image>
+    <Image Include="rsc\images\environments\overlay.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Font Include="rsc\fonts\lazy.ttf" />

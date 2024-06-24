@@ -28,6 +28,7 @@ namespace AE
 			Scene* _currentScene = NULL;
 			TTF_Font* _font = NULL;
 			Character* _player = NULL;
+			Ground* _overlay = NULL;
 
 			Timer _globalTimer{};
 			Timer _fpsTimer{};
@@ -46,6 +47,7 @@ namespace AE
 			void ManuallyCapFPS();
 
 			void HandleEvents();
+			void HandleMouseMotion(int x, int y);
 			void HandleKeyDownEvent(SDL_Keycode keyCode);
 			void HandleKeyUpEvent(SDL_Keycode keyCode);
 	};

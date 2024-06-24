@@ -54,6 +54,7 @@
     <Image Include="rsc\images\environments\Door.png" />
     <Image Include="rsc\images\environments\Floor.png" />
     <Image Include="rsc\images\environments\Grass.png" />
+    <Image Include="rsc\images\environments\overlay.png" />
     <Image Include="rsc\images\environments\Sand.png" />
     <Image Include="rsc\images\environments\TestGround.png" />
     <Image Include="rsc\images\environments\Tomb.png" />
