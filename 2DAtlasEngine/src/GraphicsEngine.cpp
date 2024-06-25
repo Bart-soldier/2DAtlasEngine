@@ -136,11 +136,12 @@ namespace AE
 		return new TextTexture(_renderer, font, text, color);
 	}
 
-	void GraphicsEngine::RenderTexture(Texture* texture, int x, int y, bool resize, double angle, SDL_Point* center, SDL_RendererFlip flip)
+	void GraphicsEngine::RenderTexture(Texture* texture, int x, int y, Camera* camera, bool resize, double angle, SDL_Point* center, SDL_RendererFlip flip)
 	{
 		if (texture != NULL)
 		{
-			SDL_Rect renderQuad = { x, y,
+			SDL_Rect renderQuad = { camera == nullptr ? x : x - camera->GetPosX(),
+									camera == nullptr ? y : y - camera->GetPosY(),
 									texture->GetRenderClip()->w * (resize ? TILE_RENDER_FACTOR : 1),
 									texture->GetRenderClip()->h * (resize ? TILE_RENDER_FACTOR : 1)};
 

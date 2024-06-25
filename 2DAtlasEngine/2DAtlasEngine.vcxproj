@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\PhysicsEngine.cpp" />
     <ClCompile Include="src\RegularTexture.cpp" />
     <ClCompile Include="src\SpriteTexture.cpp" />
@@ -34,6 +35,7 @@
     <ClCompile Include="src\TextTexture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inc\Camera.hpp" />
     <ClInclude Include="inc\Constants.hpp" />
     <ClInclude Include="inc\Character.hpp" />
     <ClInclude Include="inc\GameObject.hpp" />

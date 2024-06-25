@@ -15,16 +15,28 @@ namespace AE
 		}
 	}
 
+	void PhysicsEngine::MoveCharacter(Character* character, Scene* scene)
+	{
+		if (!character->Move(_deltaTime.GetTicks()))
+			return;
+
+		CheckSceneBoundaries(scene, character);
+
+		character->ConfirmMove();
+	}
+
 	void PhysicsEngine::CheckSceneBoundaries(Scene* scene, Character* character)
 	{
-		if (character->_desiredX + character->_boundingBox.x < 0)
-			character->_desiredX = 0 - character->_boundingBox.x;
-		else if (character->_desiredX + character->_boundingBox.x + character->_boundingBox.w >= scene->_width * TILE_RENDER_SIZE)
-			character->_desiredX = scene->_width * TILE_RENDER_SIZE - (character->_boundingBox.x + character->_boundingBox.w);
+		SDL_Rect collisionBox = character->GetBoundingBox();
 
-		if (character->_desiredY + character->_boundingBox.y < 0)
-			character->_desiredY = 0 - character->_boundingBox.y;
-		else if (character->_desiredY + character->_boundingBox.y + character->_boundingBox.h >= scene->_height * TILE_RENDER_SIZE)
-			character->_desiredY = scene->_height * TILE_RENDER_SIZE - (character->_boundingBox.y + character->_boundingBox.h);
+		if (character->_desiredX + collisionBox.x < 0)
+			character->_desiredX = 0 - collisionBox.x;
+		else if (character->_desiredX + collisionBox.x + collisionBox.w >= scene->_width * TILE_RENDER_SIZE)
+			character->_desiredX = scene->_width * TILE_RENDER_SIZE - (collisionBox.x + collisionBox.w);
+
+		if (character->_desiredY + collisionBox.y < 0)
+			character->_desiredY = 0 - collisionBox.y;
+		else if (character->_desiredY + collisionBox.y + collisionBox.h >= scene->_height * TILE_RENDER_SIZE)
+			character->_desiredY = scene->_height * TILE_RENDER_SIZE - (collisionBox.y + collisionBox.h);
 	}
 }

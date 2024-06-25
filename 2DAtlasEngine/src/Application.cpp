@@ -6,22 +6,23 @@ namespace AE
 	{
 		InitializeUtils();
 
-		std::stringstream timeText;
-		Texture* text;
-
 		Ground* grass = new Ground(_graphicEngine.CreateRegularTexture("rsc/images/environments/TestGround.png"));
-		_currentScene = new Scene(20, 10, "Main Scene", grass);
+		_currentScene = new Scene(30, 30, "Main Scene", grass);
 
-		Texture* minimap = _graphicEngine.CreateRegularTexture("rsc/minimap.png");
+		minimap = _graphicEngine.CreateRegularTexture("rsc/minimap.png");
 		minimap->SetBlendMode();
 		minimap->SetAlpha(192);
 
 		SpriteTexture* characterTexture = _graphicEngine.CreateSpriteTexture("rsc/images/characters/DrJonez.png", 4, 4);
 		characterTexture->SetColumnIndex(0);
-		_player = new Character(characterTexture, 240, 190, 2 * TILE_RENDER_SIZE);
-		_player->_boundingBox = { 2 * TILE_RENDER_FACTOR, 4 * TILE_RENDER_FACTOR, TILE_RENDER_SIZE - 4 * TILE_RENDER_FACTOR, TILE_RENDER_SIZE * 2 - 4 * TILE_RENDER_FACTOR };
+		_player = new Character(characterTexture, 240, 190, 6 * TILE_RENDER_SIZE);
+		_player->SetBoundingBox(2 * TILE_RENDER_FACTOR, 4 * TILE_RENDER_FACTOR, TILE_RENDER_SIZE - 4 * TILE_RENDER_FACTOR, TILE_RENDER_SIZE * 2 - 4 * TILE_RENDER_FACTOR);
+		_controlledCharacter = _player;
 
-		//_player = new Character(_graphicEngine.CreateRegularTexture("rsc/images/environments/Sand.png"), 240, 190, 5);
+		_editor = new Character(NULL, 240, 190, 6 * TILE_RENDER_SIZE);
+
+		_camera.FocusOn(_controlledCharacter);
+		_camera.Bind(_currentScene->_width * TILE_RENDER_SIZE, _currentScene->_height * TILE_RENDER_SIZE);
 
 		_currentScene->AddCharacter(_player);
 
@@ -33,18 +34,12 @@ namespace AE
 
 			HandleEvents();
 
-			timeText.str("");
-			timeText << "FPS: " << GetFPS();
-			text = _graphicEngine.CreateTextTexture(_font, timeText.str().c_str(), { 0, 0, 0 });
+			CalculatePhysics();
 
-			_physicsEngine.MoveCharacters(_currentScene);
-			_physicsEngine._deltaTime.Start();
-
+			_camera.Update();
 			RenderCurrentScene();
-
-			_graphicEngine.RenderTexture(text, 0, 0, false);
-			_graphicEngine.SetViewport(GraphicsEngine::Viewport::MINIMAP);
-			_graphicEngine.RenderTextureFullViewport(minimap);
+			RenderCurrentCharacters();
+			RenderUI();
 
 			EndFrame();
 		}
@@ -66,6 +61,27 @@ namespace AE
 		_fpsTimer.Start();
 	}
 
+	void Application::SwitchGameMode()
+	{
+		switch (_gameMode)
+		{
+			case GAMEMODE_PLAY:
+				_gameMode = GAMEMODE_EDIT;
+				_editor->SetX(_player->GetX());
+				_editor->SetY(_player->GetY());
+				_controlledCharacter = _editor;
+				_hideUI = true;
+				break;
+			case GAMEMODE_EDIT:
+				_gameMode = GAMEMODE_PLAY;
+				_controlledCharacter = _player;
+				_hideUI = false;
+				break;
+		}
+
+		_camera.FocusOn(_controlledCharacter);
+	}
+
 	void Application::StartFrame()
 	{
 		_fpsCapTimer.Start();
@@ -80,31 +96,59 @@ namespace AE
 		ManuallyCapFPS();
 	}
 
-	void Application::RenderCurrentScene() {
-		for (int y = 0; y < _currentScene->_height; y++) {
-			for (int x = 0; x < _currentScene->_width; x++) {
+	void Application::CalculatePhysics()
+	{
+		switch (_gameMode) {
+			case GAMEMODE_PLAY:
+				_physicsEngine.MoveCharacters(_currentScene);
+				break;
+			case GAMEMODE_EDIT:
+				_physicsEngine.MoveCharacter(_controlledCharacter, _currentScene);
+				break;
+		}
+
+		_physicsEngine._deltaTime.Start();
+	}
+
+	void Application::RenderCurrentScene()
+	{
+		for (int y = 0; y < _currentScene->_height; y++)
+		{
+			for (int x = 0; x < _currentScene->_width; x++)
+			{
 				GameObject* gameObject = _currentScene->GetBackgroundInGrid(x, y);
 				if (gameObject != nullptr)
-					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * TILE_RENDER_SIZE, y * TILE_RENDER_SIZE);
+					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * TILE_RENDER_SIZE, y * TILE_RENDER_SIZE, &_camera);
 
 				gameObject = _currentScene->GetForegroundInGrid(x, y);
 				if (gameObject != nullptr)
-					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * TILE_RENDER_SIZE, y * TILE_RENDER_SIZE);
+					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * TILE_RENDER_SIZE, y * TILE_RENDER_SIZE, &_camera);
 			}
 		}
+	}
 
-		for (Character* character : _currentScene->GetCharacters())
+	void Application::RenderCurrentCharacters()
+	{
+		if (_gameMode == GAMEMODE_PLAY)
 		{
-			_graphicEngine.RenderTexture(character->GetTexture(), character->GetX(), character->GetY());
+			for (Character* character : _currentScene->GetCharacters())
+			{
+				_graphicEngine.RenderTexture(character->GetTexture(), character->GetX(), character->GetY(), &_camera);
+			}
 		}
 	}
 
-	void Application::RenderCurrentCharacters() {
+	void Application::RenderUI()
+	{
+		if (!_hideUI) {
+			timeText.str("");
+			timeText << "FPS: " << GetFPS();
+			text = _graphicEngine.CreateTextTexture(_font, timeText.str().c_str(), { 0, 0, 0 });
 
-	}
-
-	void Application::RenderUI() {
-
+			_graphicEngine.RenderTexture(text, 0, 0, nullptr, false);
+			_graphicEngine.SetViewport(GraphicsEngine::Viewport::MINIMAP);
+			_graphicEngine.RenderTextureFullViewport(minimap);
+		}
 	}
 
 	float Application::GetFPS()
@@ -148,17 +192,19 @@ namespace AE
 
 	void Application::HandleMouseMotion(int x, int y)
 	{
-		_currentScene->SetForegroundInPixel(x, y, _overlay);
+		_currentScene->SetForegroundInPixel(_camera.GetPosX() + x, _camera.GetPosY() + y, _overlay);
 	}
 
 	void Application::HandleKeyDownEvent(SDL_Keycode keyCode)
 	{
 		switch (keyCode)
 		{
-			case SDLK_UP: _player->StartMoving(UP); break;
-			case SDLK_DOWN: _player->StartMoving(DOWN); break;
-			case SDLK_LEFT: _player->StartMoving(LEFT); break;
-			case SDLK_RIGHT: _player->StartMoving(RIGHT); break;
+			case SDLK_UP: _controlledCharacter->StartMoving(UP); break;
+			case SDLK_DOWN: _controlledCharacter->StartMoving(DOWN); break;
+			case SDLK_LEFT: _controlledCharacter->StartMoving(LEFT); break;
+			case SDLK_RIGHT: _controlledCharacter->StartMoving(RIGHT); break;
+			case SDLK_TAB: SwitchGameMode(); break;
+			case SDLK_ESCAPE: _graphicEngine._shouldClose = true; break;
 		}
 	}
 
@@ -166,10 +212,10 @@ namespace AE
 	{
 		switch (keyCode)
 		{
-			case SDLK_UP: _player->StopMoving(UP); break;
-			case SDLK_DOWN: _player->StopMoving(DOWN); break;
-			case SDLK_LEFT: _player->StopMoving(LEFT); break;
-			case SDLK_RIGHT: _player->StopMoving(RIGHT); break;
+			case SDLK_UP: _controlledCharacter->StopMoving(UP); break;
+			case SDLK_DOWN: _controlledCharacter->StopMoving(DOWN); break;
+			case SDLK_LEFT: _controlledCharacter->StopMoving(LEFT); break;
+			case SDLK_RIGHT: _controlledCharacter->StopMoving(RIGHT); break;
 		}
 	}
 }

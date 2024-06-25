@@ -31,10 +31,10 @@ namespace AE
 		/// to enable and disable movement.</para>
 		/// </summary>
 		/// <param name='deltaTime'>The time spent since last frame.</param>
+		/// <returns>True if the character could move,
+		/// <para>False otherwise.</para></returns>
 		bool Move(Uint32 deltaTime);
 		/// <summary>Applies the <see cref="_desiredX"/> and <see cref="_desiredY"/> to the character's x and y coordinates.</summary>
-		/// <returns>True if any movement occured,
-		/// <para>False otherwise.</para></returns>
 		void ConfirmMove();
 
 	private:

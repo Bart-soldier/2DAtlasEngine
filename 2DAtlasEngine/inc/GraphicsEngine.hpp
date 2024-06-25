@@ -4,6 +4,7 @@
 #include "../inc/SpriteTexture.hpp"
 #include "../inc/TextTexture.hpp"
 #include "../inc/Constants.hpp"
+#include "../inc/Camera.hpp"
 
 #include <SDL.h>
 #include <SDL_image.h>
@@ -71,11 +72,12 @@ namespace AE
 		/// <param name='texture'>The texture to add.</param>
 		/// <param name='x'>The x position of the texture.</param>
 		/// <param name='y'>The y position of the texture.</param>
+		/// <param name='Camera'>A pointer to the camera to render to.</param>
 		/// <param name='resize'>Should the texture be resized using the <see cref="TILE_RENDER_FACTOR"/>.</param>
 		/// <param name='angle'>The angle used to rotate the texture.</param>
 		/// <param name='center'>The center of rotation used to rotate the texture.</param>
 		/// <param name='flip'>The type of <see cref="SDL_RendererFlip"/> to be applied to the texture.</param>
-		void RenderTexture(Texture* texture, int x = 0, int y = 0, bool resize = true, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
+		void RenderTexture(Texture* texture, int x = 0, int y = 0, Camera* camera = nullptr, bool resize = true, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
 		/// <summary>Add a texture to the renderer by enlarging it to fit the full viewport.</summary>
 		/// <param name='texture'>The texture to add.</param>
 		void RenderTextureFullViewport(Texture* texture);

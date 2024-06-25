@@ -19,12 +19,22 @@ namespace AE
 	/// <summary>A tile's final render size.</summary>
 	static const int TILE_RENDER_SIZE = TILE_SIZE * TILE_RENDER_FACTOR;
 
+
 	/// <summary>The various mouvement directions.</summary>
 	enum Direction
 	{
 		UP,
 		DOWN,
 		LEFT,
-		RIGHT
+		RIGHT,
+		DIRECTION_TOTAL
+	};
+
+	/// <summary>The different game modes.</summary>
+	enum GameMode
+	{
+		GAMEMODE_PLAY,
+		GAMEMODE_EDIT,
+		GAMEMODE_TOTAL
 	};
 }

@@ -27,8 +27,18 @@ namespace AE
 			PhysicsEngine _physicsEngine{};
 			Scene* _currentScene = NULL;
 			TTF_Font* _font = NULL;
+			Character* _controlledCharacter = NULL;
 			Character* _player = NULL;
+			Character* _editor = NULL;
 			Ground* _overlay = NULL;
+			Camera _camera { WIDTH, HEIGHT };
+
+			bool _hideUI = false;
+			GameMode _gameMode = GAMEMODE_PLAY;
+
+			Texture* minimap = NULL;
+			std::stringstream timeText;
+			Texture* text;
 
 			Timer _globalTimer{};
 			Timer _fpsTimer{};
@@ -36,9 +46,13 @@ namespace AE
 			int _framesCounter = 0;
 
 			void InitializeUtils();
+
+			void SwitchGameMode();
+
 			void StartFrame();
 			void EndFrame();
 
+			void CalculatePhysics();
 			void RenderCurrentScene();
 			void RenderCurrentCharacters();
 			void RenderUI();

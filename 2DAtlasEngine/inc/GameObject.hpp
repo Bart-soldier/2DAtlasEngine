@@ -17,19 +17,26 @@ namespace AE
 		GameObject(Texture* texture = NULL, int x = 0, int y = 0);
 		~GameObject();
 
-		/// <summary>The game object's bounding box for collisions.
-		/// <para>Corresponds to its texture's width and height by default.</para></summary>
-		SDL_Rect _boundingBox;
+		void SetBoundingBox(int x, int y, int width, int height);
+		void SetX(int x);
+		void SetY(int y);
 
 		Texture* GetTexture();
 		int GetX();
 		int GetY();
+		int GetWidth();
+		int GetHeight();
+		SDL_Rect GetBoundingBox();
 
 	protected:
 		/// <summary>The game object's x coordinate.</summary>
 		float _posX;
 		/// <summary>The game object's x coordinate.</summary>
 		float _posY;
+
+		/// <summary>The game object's bounding box for collisions.
+		/// <para>Corresponds to its texture's width and height by default.</para></summary>
+		SDL_Rect _boundingBox;
 
 	private:
 		/// <summary>The game object's texture.</summary>
