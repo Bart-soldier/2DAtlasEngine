@@ -18,6 +18,7 @@ namespace AE
 	void Camera::FocusOn(GameObject* focusPoint)
 	{
 		_focusPoint = focusPoint;
+		CenterOn(_focusPoint->GetX(), _focusPoint->GetY(), _focusPoint->GetWidth(), _focusPoint->GetHeight());
 	}
 
 	void Camera::Unfocus()
@@ -75,5 +76,15 @@ namespace AE
 	int Camera::GetHeight()
 	{
 		return _height;
+	}
+
+	int Camera::GetCenterX()
+	{
+		return _posX + _width / 2;
+	}
+
+	int Camera::GetCenterY()
+	{
+		return _posY + _height / 2;
 	}
 }

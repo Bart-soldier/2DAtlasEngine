@@ -23,6 +23,8 @@ namespace AE
 		int GetPosY();
 		int GetWidth();
 		int GetHeight();
+		int GetCenterX();
+		int GetCenterY();
 
 	private:
 		int _posX;

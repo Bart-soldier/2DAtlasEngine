@@ -8,6 +8,9 @@ namespace AE
 			_boundingBox = { 0, 0, _texture->GetWidth() * TILE_RENDER_FACTOR, _texture->GetHeight() * TILE_RENDER_FACTOR };
 		else
 			_boundingBox = { 0, 0, 0, 0 };
+
+		_width = _boundingBox.w;
+		_height = _boundingBox.h;
 	}
 
 	GameObject::~GameObject()
@@ -46,12 +49,12 @@ namespace AE
 
 	int GameObject::GetWidth()
 	{
-		return _boundingBox.w;
+		return _width;
 	}
 
 	int GameObject::GetHeight()
 	{
-		return _boundingBox.h;
+		return _height;
 	}
 
 	SDL_Rect GameObject::GetBoundingBox()

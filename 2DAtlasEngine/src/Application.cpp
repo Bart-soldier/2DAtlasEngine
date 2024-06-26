@@ -67,14 +67,16 @@ namespace AE
 		{
 			case GAMEMODE_PLAY:
 				_gameMode = GAMEMODE_EDIT;
-				_editor->SetX(_player->GetX());
-				_editor->SetY(_player->GetY());
+				_editor->SetX(_camera.GetCenterX());
+				_editor->SetY(_camera.GetCenterY());
 				_controlledCharacter = _editor;
+				_camera.UnBind();
 				_hideUI = true;
 				break;
 			case GAMEMODE_EDIT:
 				_gameMode = GAMEMODE_PLAY;
 				_controlledCharacter = _player;
+				_camera.Bind(_currentScene->_width * TILE_RENDER_SIZE, _currentScene->_height * TILE_RENDER_SIZE);
 				_hideUI = false;
 				break;
 		}
@@ -192,17 +194,18 @@ namespace AE
 
 	void Application::HandleMouseMotion(int x, int y)
 	{
-		_currentScene->SetForegroundInPixel(_camera.GetPosX() + x, _camera.GetPosY() + y, _overlay);
+		if(_gameMode == GAMEMODE_EDIT)
+			_currentScene->SetForegroundInPixel(_camera.GetPosX() + x, _camera.GetPosY() + y, _overlay);
 	}
 
 	void Application::HandleKeyDownEvent(SDL_Keycode keyCode)
 	{
 		switch (keyCode)
 		{
-			case SDLK_UP: _controlledCharacter->StartMoving(UP); break;
-			case SDLK_DOWN: _controlledCharacter->StartMoving(DOWN); break;
-			case SDLK_LEFT: _controlledCharacter->StartMoving(LEFT); break;
-			case SDLK_RIGHT: _controlledCharacter->StartMoving(RIGHT); break;
+			case SDLK_UP: case SDLK_z: _controlledCharacter->StartMoving(UP); break;
+			case SDLK_DOWN: case SDLK_s: _controlledCharacter->StartMoving(DOWN); break;
+			case SDLK_LEFT: case SDLK_q: _controlledCharacter->StartMoving(LEFT); break;
+			case SDLK_RIGHT: case SDLK_d: _controlledCharacter->StartMoving(RIGHT); break;
 			case SDLK_TAB: SwitchGameMode(); break;
 			case SDLK_ESCAPE: _graphicEngine._shouldClose = true; break;
 		}
@@ -212,10 +215,10 @@ namespace AE
 	{
 		switch (keyCode)
 		{
-			case SDLK_UP: _controlledCharacter->StopMoving(UP); break;
-			case SDLK_DOWN: _controlledCharacter->StopMoving(DOWN); break;
-			case SDLK_LEFT: _controlledCharacter->StopMoving(LEFT); break;
-			case SDLK_RIGHT: _controlledCharacter->StopMoving(RIGHT); break;
+			case SDLK_UP: case SDLK_z: _controlledCharacter->StopMoving(UP); break;
+			case SDLK_DOWN: case SDLK_s: _controlledCharacter->StopMoving(DOWN); break;
+			case SDLK_LEFT: case SDLK_q: _controlledCharacter->StopMoving(LEFT); break;
+			case SDLK_RIGHT: case SDLK_d: _controlledCharacter->StopMoving(RIGHT); break;
 		}
 	}
 }

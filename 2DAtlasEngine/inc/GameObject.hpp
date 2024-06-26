@@ -33,6 +33,10 @@ namespace AE
 		float _posX;
 		/// <summary>The game object's x coordinate.</summary>
 		float _posY;
+		/// <summary>The game object's width.</summary>
+		int _width;
+		/// <summary>The game object's height.</summary>
+		int _height;
 
 		/// <summary>The game object's bounding box for collisions.
 		/// <para>Corresponds to its texture's width and height by default.</para></summary>
