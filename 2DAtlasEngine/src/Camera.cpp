@@ -18,7 +18,7 @@ namespace AE
 	void Camera::FocusOn(GameObject* focusPoint)
 	{
 		_focusPoint = focusPoint;
-		CenterOn(_focusPoint->GetX(), _focusPoint->GetY(), _focusPoint->GetWidth(), _focusPoint->GetHeight());
+		CenterOn(_focusPoint->GetXInPixel(), _focusPoint->GetYInPixel(), _focusPoint->GetWidth(), _focusPoint->GetHeight());
 	}
 
 	void Camera::Unfocus()
@@ -41,7 +41,7 @@ namespace AE
 	void Camera::Update()
 	{
 		if (_focusPoint != nullptr)
-			CenterOn(_focusPoint->GetX(), _focusPoint->GetY(), _focusPoint->GetWidth(), _focusPoint->GetHeight());
+			CenterOn(_focusPoint->GetXInPixel(), _focusPoint->GetYInPixel(), _focusPoint->GetWidth(), _focusPoint->GetHeight());
 	}
 
 	void Camera::CenterOn(int x, int y, int width, int height)

@@ -18,12 +18,14 @@ namespace AE
 		~GameObject();
 
 		void SetBoundingBox(int x, int y, int width, int height);
-		void SetX(int x);
-		void SetY(int y);
+		void SetXInPixel(int x);
+		void SetYInPixel(int y);
 
 		Texture* GetTexture();
-		int GetX();
-		int GetY();
+		int GetXInPixel();
+		int GetYInPixel();
+		int GetXInGrid();
+		int GetYInGrid();
 		int GetWidth();
 		int GetHeight();
 		SDL_Rect GetBoundingBox();

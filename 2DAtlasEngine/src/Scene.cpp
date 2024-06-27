@@ -25,16 +25,16 @@ namespace AE
 
 	GameObject* Scene::GetBackgroundInPixel(int x, int y)
 	{
-		int gridX = (x / TILE_RENDER_SIZE);
-		int gridY = (y / TILE_RENDER_SIZE);
+		int gridX = x / TILE_RENDER_SIZE;
+		int gridY = y / TILE_RENDER_SIZE;
 		return (gridX < 0 || gridX >= _width || gridY < 0 || gridY >= _height) ?
 			nullptr : _sceneElements->at(gridY * _width + gridX).first;
 	}
 
 	GameObject* Scene::GetForegroundInPixel(int x, int y)
 	{
-		int gridX = (x / TILE_RENDER_SIZE);
-		int gridY = (y / TILE_RENDER_SIZE);
+		int gridX = x / TILE_RENDER_SIZE;
+		int gridY = y / TILE_RENDER_SIZE;
 		return (gridX < 0 || gridX >= _width || gridY < 0 || gridY >= _height) ?
 			nullptr : _sceneElements->at(gridY * _width + gridX).second;
 	}
@@ -58,16 +58,16 @@ namespace AE
 
 	void Scene::SetBackgroundInPixel(int x, int y, GameObject* gameObject)
 	{
-		int gridX = (x / TILE_RENDER_SIZE);
-		int gridY = (y / TILE_RENDER_SIZE);
+		int gridX = x / TILE_RENDER_SIZE;
+		int gridY = y / TILE_RENDER_SIZE;
 		if (!(gridX < 0 || gridX >= _width || gridY < 0 || gridY >= _height))
 			_sceneElements->at(gridY * _width + gridX).first = gameObject;
 	}
 
 	void Scene::SetForegroundInPixel(int x, int y, GameObject* gameObject)
 	{
-		int gridX = (x / TILE_RENDER_SIZE);
-		int gridY = (y / TILE_RENDER_SIZE);
+		int gridX = x / TILE_RENDER_SIZE;
+		int gridY = y / TILE_RENDER_SIZE;
 		if (!(gridX < 0 || gridX >= _width || gridY < 0 || gridY >= _height))
 			_sceneElements->at(gridY * _width + gridX).second = gameObject;
 	}

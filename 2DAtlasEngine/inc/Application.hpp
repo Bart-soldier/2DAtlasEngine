@@ -30,7 +30,7 @@ namespace AE
 			Character* _controlledCharacter = NULL;
 			Character* _player = NULL;
 			Character* _editor = NULL;
-			Ground* _overlay = NULL;
+			Ground* _editObject = NULL;
 			Camera _camera { WIDTH, HEIGHT };
 
 			bool _hideUI = false;
@@ -62,6 +62,7 @@ namespace AE
 
 			void HandleEvents();
 			void HandleMouseMotion(int x, int y);
+			void HandleMouseButtonDown();
 			void HandleKeyDownEvent(SDL_Keycode keyCode);
 			void HandleKeyUpEvent(SDL_Keycode keyCode);
 	};

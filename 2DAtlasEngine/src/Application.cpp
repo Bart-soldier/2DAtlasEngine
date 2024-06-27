@@ -26,7 +26,7 @@ namespace AE
 
 		_currentScene->AddCharacter(_player);
 
-		_overlay = new Ground(_graphicEngine.CreateRegularTexture("rsc/images/environments/overlay.png"));
+		_editObject = new Ground(_graphicEngine.CreateRegularTexture("rsc/images/environments/Sand.png"));
 
 		while (!_graphicEngine._shouldClose)
 		{
@@ -67,8 +67,8 @@ namespace AE
 		{
 			case GAMEMODE_PLAY:
 				_gameMode = GAMEMODE_EDIT;
-				_editor->SetX(_camera.GetCenterX());
-				_editor->SetY(_camera.GetCenterY());
+				_editor->SetXInPixel(_camera.GetCenterX());
+				_editor->SetYInPixel(_camera.GetCenterY());
 				_controlledCharacter = _editor;
 				_camera.UnBind();
 				_hideUI = true;
@@ -127,6 +127,9 @@ namespace AE
 					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * TILE_RENDER_SIZE, y * TILE_RENDER_SIZE, &_camera);
 			}
 		}
+
+		if (_gameMode == GAMEMODE_EDIT)
+			_graphicEngine.RenderTexture(_editObject->GetTexture(), _editObject->GetXInGrid() * TILE_RENDER_SIZE, _editObject->GetYInGrid() * TILE_RENDER_SIZE, &_camera);
 	}
 
 	void Application::RenderCurrentCharacters()
@@ -135,7 +138,7 @@ namespace AE
 		{
 			for (Character* character : _currentScene->GetCharacters())
 			{
-				_graphicEngine.RenderTexture(character->GetTexture(), character->GetX(), character->GetY(), &_camera);
+				_graphicEngine.RenderTexture(character->GetTexture(), character->GetXInPixel(), character->GetYInPixel(), &_camera);
 			}
 		}
 	}
@@ -182,6 +185,10 @@ namespace AE
 				int x, y;
 				SDL_GetMouseState(&x, &y);
 				HandleMouseMotion(x, y);
+				break;
+			case SDL_MOUSEBUTTONDOWN:
+				HandleMouseButtonDown();
+				break;
 			case SDL_KEYDOWN:
 				if (event.key.repeat == 0) HandleKeyDownEvent(event.key.keysym.sym);
 				break;
@@ -194,8 +201,23 @@ namespace AE
 
 	void Application::HandleMouseMotion(int x, int y)
 	{
-		if(_gameMode == GAMEMODE_EDIT)
-			_currentScene->SetForegroundInPixel(_camera.GetPosX() + x, _camera.GetPosY() + y, _overlay);
+		if (_gameMode == GAMEMODE_EDIT)
+		{
+			_editObject->SetXInPixel(_camera.GetPosX() + x);
+			_editObject->SetYInPixel(_camera.GetPosY() + y);
+		}
+			//_currentScene->SetForegroundInPixel(_camera.GetPosX() + x, _camera.GetPosY() + y, _overlay);
+	}
+
+	void Application::HandleMouseButtonDown()
+	{
+		switch (_gameMode)
+		{
+			case GAMEMODE_EDIT:
+				_currentScene->SetBackgroundInGrid(_editObject->GetXInGrid(),
+												   _editObject->GetYInGrid(),
+												   new Ground(_editObject->GetTexture()));
+		}
 	}
 
 	void Application::HandleKeyDownEvent(SDL_Keycode keyCode)

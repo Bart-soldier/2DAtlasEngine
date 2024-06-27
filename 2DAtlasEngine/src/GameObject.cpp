@@ -22,12 +22,12 @@ namespace AE
 		_boundingBox = { x, y, width, height };
 	}
 
-	void GameObject::SetX(int x)
+	void GameObject::SetXInPixel(int x)
 	{
 		_posX = x;
 	}
 
-	void GameObject::SetY(int y)
+	void GameObject::SetYInPixel(int y)
 	{
 		_posY = y;
 	}
@@ -37,14 +37,26 @@ namespace AE
 		return _texture;
 	}
 
-	int GameObject::GetX()
+	int GameObject::GetXInPixel()
 	{
 		return static_cast<int>(_posX);
 	}
 
-	int GameObject::GetY()
+	int GameObject::GetYInPixel()
 	{
 		return static_cast<int>(_posY);
+	}
+
+	int GameObject::GetXInGrid()
+	{
+		int x = static_cast<int>(_posX);
+		return x / TILE_RENDER_SIZE;
+	}
+
+	int GameObject::GetYInGrid()
+	{
+		int y = static_cast<int>(_posY);
+		return y / TILE_RENDER_SIZE;
 	}
 
 	int GameObject::GetWidth()
