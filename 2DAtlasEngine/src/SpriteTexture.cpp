@@ -6,8 +6,8 @@ namespace AE
 		: Texture(renderer, IMG_Load(path.c_str()), colorKeyed, kred, kgreen, kblue),
 		_lineNb{ lineNb }, _columnNb{ columnNb }
 	{
-		_elementWidth = _width / _lineNb;
-		_elementHeight = _height / _columnNb;
+		_elementWidth = _width / _columnNb;
+		_elementHeight = _height / _lineNb;
 		_lineIndex = 0;
 		_columnIndex = 0;
 		UpdateRenderClip();
@@ -30,18 +30,18 @@ namespace AE
 
 	void SpriteTexture::SetLineIndex(int lineIndex)
 	{
-		_lineIndex = lineIndex;
+		_lineIndex = lineIndex >= _lineNb ? _lineNb - 1 : lineIndex < 0 ? 0 : lineIndex;
 		UpdateRenderClip();
 	}
 
 	void SpriteTexture::SetColumnIndex(int columnIndex)
 	{
-		_columnIndex = columnIndex;
+		_columnIndex = columnIndex >= _columnNb ? _columnNb - 1 : columnIndex < 0 ? 0 : columnIndex;
 		UpdateRenderClip();
 	}
 
 	void SpriteTexture::UpdateRenderClip()
 	{
-		_renderClip = { _lineIndex * _elementWidth, _columnIndex * _elementHeight, _elementWidth, _elementHeight };
+		_renderClip = { _columnIndex * _elementWidth, _lineIndex * _elementHeight, _elementWidth, _elementHeight };
 	}
 }

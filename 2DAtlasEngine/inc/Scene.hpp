@@ -80,7 +80,7 @@ namespace AE
 
 	private:
 		/// <summary>A vector representing the scene as a grid, where every element in the grid has a background and a foreground <see cref="GameObject"/>.</summary>
-		std::vector<std::pair<GameObject*, GameObject*>>* _sceneElements;
+		std::vector<std::pair<GameObject*, GameObject*>> _sceneElements;
 		/// <returns>A vector of pointers to all <see cref="Character"/> present in this scene.</returns>
 		std::vector<Character*> _characters;
 	};

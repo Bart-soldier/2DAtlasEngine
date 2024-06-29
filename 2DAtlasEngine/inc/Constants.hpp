@@ -34,7 +34,7 @@ namespace AE
 	enum GameMode
 	{
 		GAMEMODE_PLAY,
-		GAMEMODE_EDIT,
+		GAMEMODE_BUILD,
 		GAMEMODE_TOTAL
 	};
 }

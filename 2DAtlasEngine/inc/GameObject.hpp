@@ -20,6 +20,7 @@ namespace AE
 		void SetBoundingBox(int x, int y, int width, int height);
 		void SetXInPixel(int x);
 		void SetYInPixel(int y);
+		void SetTexture(Texture* texture);
 
 		Texture* GetTexture();
 		int GetXInPixel();
@@ -47,5 +48,7 @@ namespace AE
 	private:
 		/// <summary>The game object's texture.</summary>
 		Texture* _texture;
+
+		void SetDimensions();
 	};
 }

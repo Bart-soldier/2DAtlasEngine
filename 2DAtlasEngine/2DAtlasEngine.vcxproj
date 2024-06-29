@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Inventory.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\PhysicsEngine.cpp" />
     <ClCompile Include="src\RegularTexture.cpp" />
@@ -49,6 +50,7 @@
     <ClInclude Include="inc\RegularTexture.hpp" />
     <ClInclude Include="inc\SpriteTexture.hpp" />
     <ClInclude Include="inc\PhysicsEngine.hpp" />
+    <ClInclude Include="inc\Inventory.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="rsc\images\characters\DrJonez.png" />

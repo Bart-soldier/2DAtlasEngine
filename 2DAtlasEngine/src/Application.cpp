@@ -4,10 +4,14 @@ namespace AE
 {
 	void Application::Run()
 	{
-		InitializeUtils();
+		InitUtils();
 
-		Ground* grass = new Ground(_graphicEngine.CreateRegularTexture("rsc/images/environments/TestGround.png"));
-		_currentScene = new Scene(30, 30, "Main Scene", grass);
+		InitBuildMode();
+
+		_inventoryTexture = _graphicEngine.CreateSpriteTexture("rsc/images/ui/Inventory.png", 1, 2);
+
+		Ground* testGround = new Ground(_graphicEngine.CreateRegularTexture("rsc/images/environments/TestGround.png"));
+		_currentScene = new Scene(30, 30, "Main Scene", testGround);
 
 		minimap = _graphicEngine.CreateRegularTexture("rsc/minimap.png");
 		minimap->SetBlendMode();
@@ -51,7 +55,7 @@ namespace AE
 		_font = NULL;
 	}
 
-	void Application::InitializeUtils()
+	void Application::InitUtils()
 	{
 		_font = TTF_OpenFont("rsc/fonts/lazy.ttf", 28);
 		if (_font == NULL)
@@ -61,23 +65,32 @@ namespace AE
 		_fpsTimer.Start();
 	}
 
+	void Application::InitBuildMode()
+	{
+		_buildInventory.Add(new Ground(_graphicEngine.CreateRegularTexture("rsc/images/environments/Grass.png")));
+		_buildInventory.Add(new Ground(_graphicEngine.CreateRegularTexture("rsc/images/environments/Sand.png")));
+		_buildInventory.Add(new Ground(_graphicEngine.CreateRegularTexture("rsc/images/environments/Floor.png")));
+	}
+
 	void Application::SwitchGameMode()
 	{
 		switch (_gameMode)
 		{
 			case GAMEMODE_PLAY:
-				_gameMode = GAMEMODE_EDIT;
+				_gameMode = GAMEMODE_BUILD;
 				_editor->SetXInPixel(_camera.GetCenterX());
 				_editor->SetYInPixel(_camera.GetCenterY());
 				_controlledCharacter = _editor;
 				_camera.UnBind();
 				_hideUI = true;
+				_currentInventory = &_buildInventory;
 				break;
-			case GAMEMODE_EDIT:
+			case GAMEMODE_BUILD:
 				_gameMode = GAMEMODE_PLAY;
 				_controlledCharacter = _player;
 				_camera.Bind(_currentScene->_width * TILE_RENDER_SIZE, _currentScene->_height * TILE_RENDER_SIZE);
 				_hideUI = false;
+				_currentInventory = &_playInventory;
 				break;
 		}
 
@@ -104,7 +117,7 @@ namespace AE
 			case GAMEMODE_PLAY:
 				_physicsEngine.MoveCharacters(_currentScene);
 				break;
-			case GAMEMODE_EDIT:
+			case GAMEMODE_BUILD:
 				_physicsEngine.MoveCharacter(_controlledCharacter, _currentScene);
 				break;
 		}
@@ -128,7 +141,7 @@ namespace AE
 			}
 		}
 
-		if (_gameMode == GAMEMODE_EDIT)
+		if (_gameMode == GAMEMODE_BUILD)
 			_graphicEngine.RenderTexture(_editObject->GetTexture(), _editObject->GetXInGrid() * TILE_RENDER_SIZE, _editObject->GetYInGrid() * TILE_RENDER_SIZE, &_camera);
 	}
 
@@ -150,9 +163,28 @@ namespace AE
 			timeText << "FPS: " << GetFPS();
 			text = _graphicEngine.CreateTextTexture(_font, timeText.str().c_str(), { 0, 0, 0 });
 
-			_graphicEngine.RenderTexture(text, 0, 0, nullptr, false);
-			_graphicEngine.SetViewport(GraphicsEngine::Viewport::MINIMAP);
+			_graphicEngine.RenderTexture(text, 0, 0, nullptr, GraphicsEngine::RESIZE_NONE);
+			_graphicEngine.SetViewport(GraphicsEngine::MINIMAP);
 			_graphicEngine.RenderTextureFullViewport(minimap);
+		}
+
+		_graphicEngine.SetViewport(GraphicsEngine::FULLSCREEN);
+		int drawStart = (WIDTH / 2) - (_currentInventory->GetCapacity() / 2) * TILE_RENDER_SIZE;
+		for (int i = 0; i < _currentInventory->GetCapacity(); i++)
+		{
+			if (i == _currentInventory->GetCurrentIndex()) {
+				_inventoryTexture->SetColumnIndex(1);
+			}
+			else _inventoryTexture->SetColumnIndex(0);
+
+			_graphicEngine.RenderTexture(_inventoryTexture, drawStart, HEIGHT - (3 * TILE_RENDER_SIZE / 2), nullptr);
+			if(_currentInventory->GetAt(i) != nullptr)
+				_graphicEngine.RenderTexture(_currentInventory->GetAt(i)->GetTexture(),
+											 drawStart + TILE_RENDER_SIZE / 8,
+											 HEIGHT - (3 * TILE_RENDER_SIZE / 2) + TILE_RENDER_SIZE / 8,
+											 nullptr,
+											 GraphicsEngine::RESIZE_THREEQUARTERS);
+			drawStart += TILE_RENDER_SIZE;
 		}
 	}
 
@@ -189,6 +221,9 @@ namespace AE
 			case SDL_MOUSEBUTTONDOWN:
 				HandleMouseButtonDown();
 				break;
+			case SDL_MOUSEWHEEL:
+				HandleMouseWheel(event);
+				break;
 			case SDL_KEYDOWN:
 				if (event.key.repeat == 0) HandleKeyDownEvent(event.key.keysym.sym);
 				break;
@@ -201,7 +236,7 @@ namespace AE
 
 	void Application::HandleMouseMotion(int x, int y)
 	{
-		if (_gameMode == GAMEMODE_EDIT)
+		if (_gameMode == GAMEMODE_BUILD)
 		{
 			_editObject->SetXInPixel(_camera.GetPosX() + x);
 			_editObject->SetYInPixel(_camera.GetPosY() + y);
@@ -209,11 +244,23 @@ namespace AE
 			//_currentScene->SetForegroundInPixel(_camera.GetPosX() + x, _camera.GetPosY() + y, _overlay);
 	}
 
+	void Application::HandleMouseWheel(SDL_Event event)
+	{
+		if (event.wheel.y > 0) _currentInventory->IncrementIndex();
+		else _currentInventory->DecrementIndex();
+
+		if (_gameMode == GAMEMODE_BUILD)
+		{
+			if (_currentInventory->GetAtCurrentIndex() != nullptr)
+				_editObject->SetTexture(_currentInventory->GetAtCurrentIndex()->GetTexture());
+		}
+	}
+
 	void Application::HandleMouseButtonDown()
 	{
 		switch (_gameMode)
 		{
-			case GAMEMODE_EDIT:
+			case GAMEMODE_BUILD:
 				_currentScene->SetBackgroundInGrid(_editObject->GetXInGrid(),
 												   _editObject->GetYInGrid(),
 												   new Ground(_editObject->GetTexture()));

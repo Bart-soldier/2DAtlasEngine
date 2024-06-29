@@ -99,13 +99,13 @@ namespace AE
 	void GraphicsEngine::SetViewport(Viewport viewportValue)
 	{
 		switch (viewportValue) {
-			case Viewport::FULLSCREEN:
+			case FULLSCREEN:
 				_viewport.x = 0;
 				_viewport.y = 0;
 				_viewport.w = _width;
 				_viewport.h = _height;
 				break;
-			case Viewport::MINIMAP:
+			case MINIMAP:
 				_viewport.x = _width - (_width/4);
 				_viewport.y = 0;
 				_viewport.w = _width / 4;
@@ -136,14 +136,14 @@ namespace AE
 		return new TextTexture(_renderer, font, text, color);
 	}
 
-	void GraphicsEngine::RenderTexture(Texture* texture, int x, int y, Camera* camera, bool resize, double angle, SDL_Point* center, SDL_RendererFlip flip)
+	void GraphicsEngine::RenderTexture(Texture* texture, int x, int y, Camera* camera, Resize resize, double angle, SDL_Point* center, SDL_RendererFlip flip)
 	{
 		if (texture != NULL)
 		{
 			SDL_Rect renderQuad = { camera == nullptr ? x : x - camera->GetPosX(),
 									camera == nullptr ? y : y - camera->GetPosY(),
-									texture->GetRenderClip()->w * (resize ? TILE_RENDER_FACTOR : 1),
-									texture->GetRenderClip()->h * (resize ? TILE_RENDER_FACTOR : 1)};
+									texture->GetRenderClip()->w * resize * (TILE_RENDER_FACTOR / RESIZE_FULL),
+									texture->GetRenderClip()->h * resize * (TILE_RENDER_FACTOR / RESIZE_FULL)};
 
 			SDL_RenderCopyEx(_renderer, texture->GetTexture(), texture->GetRenderClip(), &renderQuad, angle, center, flip);
 		}

@@ -25,6 +25,16 @@ namespace AE
 			TOTAL
 		};
 
+		/// <summary>The different texture resize options.</summary>
+		enum Resize
+		{
+			RESIZE_NONE,
+			RESIZE_ONEQUARTER,
+			RESIZE_HALF,
+			RESIZE_THREEQUARTERS,
+			RESIZE_FULL
+		};
+
 		/// <param name='width'>The application window's width.</param>
 		/// <param name='height'>The application window's height.</param>
 		/// <param name='name'>The application window's name.</param>
@@ -73,11 +83,11 @@ namespace AE
 		/// <param name='x'>The x position of the texture.</param>
 		/// <param name='y'>The y position of the texture.</param>
 		/// <param name='Camera'>A pointer to the camera to render to.</param>
-		/// <param name='resize'>Should the texture be resized using the <see cref="TILE_RENDER_FACTOR"/>.</param>
+		/// <param name='resize'>Should the texture be resized using the <see cref="TILE_RENDER_FACTOR"/>. Defined by enum <see cref="Resize"/>.</param>
 		/// <param name='angle'>The angle used to rotate the texture.</param>
 		/// <param name='center'>The center of rotation used to rotate the texture.</param>
 		/// <param name='flip'>The type of <see cref="SDL_RendererFlip"/> to be applied to the texture.</param>
-		void RenderTexture(Texture* texture, int x = 0, int y = 0, Camera* camera = nullptr, bool resize = true, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
+		void RenderTexture(Texture* texture, int x = 0, int y = 0, Camera* camera = nullptr, Resize resize = RESIZE_FULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
 		/// <summary>Add a texture to the renderer by enlarging it to fit the full viewport.</summary>
 		/// <param name='texture'>The texture to add.</param>
 		void RenderTextureFullViewport(Texture* texture);

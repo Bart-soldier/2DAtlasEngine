@@ -8,6 +8,7 @@
 #include "Scene.hpp"
 #include "Ground.hpp"
 #include "Character.hpp"
+#include "Inventory.hpp"
 
 #include <sstream>
 
@@ -30,8 +31,13 @@ namespace AE
 			Character* _controlledCharacter = NULL;
 			Character* _player = NULL;
 			Character* _editor = NULL;
-			Ground* _editObject = NULL;
 			Camera _camera { WIDTH, HEIGHT };
+			Inventory* _currentInventory = &_playInventory;
+			Inventory _playInventory { 5 };
+			Inventory _buildInventory { 5 };
+			SpriteTexture* _inventoryTexture = NULL;
+
+			GameObject* _editObject = NULL;
 
 			bool _hideUI = false;
 			GameMode _gameMode = GAMEMODE_PLAY;
@@ -45,7 +51,8 @@ namespace AE
 			Timer _fpsCapTimer{};
 			int _framesCounter = 0;
 
-			void InitializeUtils();
+			void InitUtils();
+			void InitBuildMode();
 
 			void SwitchGameMode();
 
@@ -62,6 +69,7 @@ namespace AE
 
 			void HandleEvents();
 			void HandleMouseMotion(int x, int y);
+			void HandleMouseWheel(SDL_Event event);
 			void HandleMouseButtonDown();
 			void HandleKeyDownEvent(SDL_Keycode keyCode);
 			void HandleKeyUpEvent(SDL_Keycode keyCode);
