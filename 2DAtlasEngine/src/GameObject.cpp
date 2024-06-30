@@ -39,11 +39,8 @@ namespace AE
 
 	void GameObject::SetTexture(Texture* texture)
 	{
-		if (texture != nullptr)
-		{
-			_texture = texture;
-			SetDimensions();
-		}
+		_texture = texture;
+		SetDimensions();
 	}
 
 	Texture* GameObject::GetTexture()

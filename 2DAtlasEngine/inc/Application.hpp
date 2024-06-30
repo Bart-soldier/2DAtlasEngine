@@ -56,8 +56,8 @@ namespace AE
 			/* --- UI --- */
 			bool _hideUI = false;
 			Inventory* _currentInventory = &_playInventory;
-			Inventory _playInventory { _graphicEngine.CreateSpriteTexture("rsc/images/ui/PlayInventory.png", 1, 2), 5 };
-			Inventory _buildInventory { _graphicEngine.CreateSpriteTexture("rsc/images/ui/BuildInventory.png", 1, 2), 5 };
+			Inventory _playInventory { _graphicEngine.CreateSpriteTexture("rsc/images/ui/PlayInventory.png", 1, 2), 27 };
+			Inventory _buildInventory { _graphicEngine.CreateSpriteTexture("rsc/images/ui/BuildInventory.png", 1, 2), 32 };
 			Texture* _minimap = nullptr;
 			std::stringstream _fpsCounterText;
 			Texture* _fpsCounterTexture = nullptr;

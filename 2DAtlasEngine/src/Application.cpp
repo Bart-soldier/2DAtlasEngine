@@ -66,7 +66,7 @@ namespace AE
 		_controlledCharacter = _player;
 		_sceneManager.GetCurrentScene()->AddCharacter(_player);
 
-		_builder = new Character(NULL, _player->GetXInPixel(), _player->GetYInPixel(), _player->GetSpeed());
+		_builder = new Character(nullptr, _player->GetXInPixel(), _player->GetYInPixel(), _player->GetSpeed());
 
 		/* --- Camera --- */
 		_camera.FocusOn(_controlledCharacter);
@@ -185,8 +185,8 @@ namespace AE
 		}
 
 		_graphicEngine.SetViewport(GraphicsEngine::VIEWPORT_INVENTORY);
-		int drawStart = (WIDTH / 2) - (_currentInventory->GetCapacity() / 2) * TILE_RENDER_SIZE;
-		for (int i = 0; i < _currentInventory->GetCapacity(); i++)
+		int drawStart = (WIDTH / 2) - (_currentInventory->GetMaxDisplayCurrentRow() / 2) * TILE_RENDER_SIZE;
+		for (int i = _currentInventory->BeginCurrentRow(); i < _currentInventory->EndCurrentRow(); i++)
 		{
 			_currentInventory->GetTexture()->SetColumnIndex(i == _currentInventory->GetCurrentIndex());
 
@@ -263,8 +263,7 @@ namespace AE
 
 		if (_gameMode == GAMEMODE_BUILD)
 		{
-			if (_currentInventory->GetAtCurrentIndex() != nullptr)
-				_buildObject->SetTexture(_currentInventory->GetAtCurrentIndex()->GetTexture());
+			_buildObject->SetTexture(_currentInventory->GetAtCurrentIndex() != nullptr ? _currentInventory->GetAtCurrentIndex()->GetTexture() : nullptr);
 		}
 	}
 
@@ -273,8 +272,9 @@ namespace AE
 		switch (_gameMode)
 		{
 			case GAMEMODE_BUILD:
-				_sceneManager.GetCurrentScene()->SetBackgroundInGrid(_buildObject->GetXInGrid(),_buildObject->GetYInGrid(),
-																	 _currentInventory->GetAtCurrentIndex());
+				if(_currentInventory->GetAtCurrentIndex() != nullptr)
+					_sceneManager.GetCurrentScene()->SetBackgroundInGrid(_buildObject->GetXInGrid(),_buildObject->GetYInGrid(),
+																		 _currentInventory->GetAtCurrentIndex());
 		}
 	}
 
@@ -286,6 +286,8 @@ namespace AE
 			case SDLK_DOWN: case SDLK_s: _controlledCharacter->StartMoving(DIRECTION_DOWN); break;
 			case SDLK_LEFT: case SDLK_q: _controlledCharacter->StartMoving(DIRECTION_LEFT); break;
 			case SDLK_RIGHT: case SDLK_d: _controlledCharacter->StartMoving(DIRECTION_RIGHT); break;
+			case SDLK_a: _currentInventory->IncrementRow(); break;
+			case SDLK_e: _currentInventory->DecrementRow(); break;
 			case SDLK_TAB: SwitchGameMode(); break;
 			case SDLK_ESCAPE: _graphicEngine._shouldClose = true; break;
 		}
