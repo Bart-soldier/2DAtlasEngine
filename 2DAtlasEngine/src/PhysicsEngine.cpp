@@ -25,6 +25,11 @@ namespace AE
 		character->ConfirmMove();
 	}
 
+	void PhysicsEngine::StartDeltaTime()
+	{
+		_deltaTime.Start();
+	}
+
 	void PhysicsEngine::CheckSceneBoundaries(Scene* scene, Character* character)
 	{
 		SDL_Rect collisionBox = character->GetBoundingBox();

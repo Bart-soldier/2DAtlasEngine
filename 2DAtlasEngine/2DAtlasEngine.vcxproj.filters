@@ -60,6 +60,9 @@
     <ClCompile Include="src\Inventory.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="src\SceneManager.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Application.hpp">
@@ -107,9 +110,12 @@
     <ClInclude Include="inc\Inventory.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="inc\SceneManager.hpp">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="rsc\minimap.png">
+    <Image Include="rsc\images\ui\Minimap.png">
       <Filter>Fichiers de ressources</Filter>
     </Image>
     <Image Include="rsc\images\characters\DrJonez.png">
@@ -142,13 +148,16 @@
     <Image Include="rsc\images\objects\ArkCovenant.png">
       <Filter>Fichiers de ressources</Filter>
     </Image>
-    <Image Include="rsc\images\ui\Inventory.png">
+    <Image Include="rsc\images\ui\PlayInventory.png">
       <Filter>Fichiers de ressources</Filter>
     </Image>
-    <Image Include="rsc\images\environments\TestGround.png">
+    <Image Include="rsc\images\environments\BasicGround.png">
       <Filter>Fichiers de ressources</Filter>
     </Image>
     <Image Include="rsc\images\environments\overlay.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="rsc\images\ui\BuildInventory.png">
       <Filter>Fichiers de ressources</Filter>
     </Image>
   </ItemGroup>

@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\SceneManager.cpp" />
     <ClCompile Include="src\Inventory.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\PhysicsEngine.cpp" />
@@ -51,6 +52,7 @@
     <ClInclude Include="inc\SpriteTexture.hpp" />
     <ClInclude Include="inc\PhysicsEngine.hpp" />
     <ClInclude Include="inc\Inventory.hpp" />
+    <ClInclude Include="inc\SceneManager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="rsc\images\characters\DrJonez.png" />
@@ -60,13 +62,14 @@
     <Image Include="rsc\images\environments\Grass.png" />
     <Image Include="rsc\images\environments\overlay.png" />
     <Image Include="rsc\images\environments\Sand.png" />
-    <Image Include="rsc\images\environments\TestGround.png" />
+    <Image Include="rsc\images\environments\BasicGround.png" />
     <Image Include="rsc\images\environments\Tomb.png" />
     <Image Include="rsc\images\environments\TombExterior.png" />
     <Image Include="rsc\images\environments\Wall.png" />
     <Image Include="rsc\images\objects\ArkCovenant.png" />
-    <Image Include="rsc\images\ui\Inventory.png" />
-    <Image Include="rsc\minimap.png" />
+    <Image Include="rsc\images\ui\BuildInventory.png" />
+    <Image Include="rsc\images\ui\PlayInventory.png" />
+    <Image Include="rsc\images\ui\Minimap.png" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="rsc\fonts\lazy.ttf" />

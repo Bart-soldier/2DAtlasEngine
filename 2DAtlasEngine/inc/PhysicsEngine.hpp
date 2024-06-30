@@ -13,9 +13,6 @@ namespace AE
 		PhysicsEngine(const PhysicsEngine&) = delete;
 		PhysicsEngine& operator=(const PhysicsEngine&) = delete;
 
-		/// <summary>Timer used to know the time spent between two frames.</summary>
-		Timer _deltaTime{};
-
 		/// <summary>Moves all the characters in a scene, while checking for collisions.</summary>
 		/// <param name='scene'>The scene containing the characters.</param>
 		void MoveCharacters(Scene* scene);
@@ -25,7 +22,13 @@ namespace AE
 		/// <param name='scene'>The scene containing the character.</param>
 		void MoveCharacter(Character* character, Scene* scene);
 
+		/// <summary>Starts the <see cref="_deltaTime"/> for next frame's physics calculations.</summary>
+		void StartDeltaTime();
+
 	private:
+		/// <summary>Timer used to know the time spent between two frames.</summary>
+		Timer _deltaTime{};
+
 		/// <summary>Checks if a character is within the boundaries of a scene.</summary>
 		/// <param name='scene'>The scene containing the character.</param>
 		/// <param name='character'>The character to check.</param>

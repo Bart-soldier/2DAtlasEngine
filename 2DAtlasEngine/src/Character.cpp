@@ -52,4 +52,9 @@ namespace AE
 		_posX = _desiredX;
 		_posY = _desiredY;
 	}
+
+	int Character::GetSpeed()
+	{
+		return _speed;
+	}
 }

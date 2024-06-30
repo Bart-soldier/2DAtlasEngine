@@ -37,6 +37,10 @@ namespace AE
 		/// <summary>Applies the <see cref="_desiredX"/> and <see cref="_desiredY"/> to the character's x and y coordinates.</summary>
 		void ConfirmMove();
 
+		/// <summary>Gets the character's speed.</summary>
+		/// <returns>The character's <see cref="_speed"/>.</returns>
+		int GetSpeed();
+
 	private:
 		/// <summary>The character's speed, in pixel per seconds.</summary>
 		int _speed;

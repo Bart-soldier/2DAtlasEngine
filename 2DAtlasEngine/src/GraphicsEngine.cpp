@@ -99,18 +99,23 @@ namespace AE
 	void GraphicsEngine::SetViewport(Viewport viewportValue)
 	{
 		switch (viewportValue) {
-			case FULLSCREEN:
+			case VIEWPORT_FULLSCREEN:
 				_viewport.x = 0;
 				_viewport.y = 0;
 				_viewport.w = _width;
 				_viewport.h = _height;
 				break;
-			case MINIMAP:
+			case VIEWPORT_MINIMAP:
 				_viewport.x = _width - (_width/4);
 				_viewport.y = 0;
 				_viewport.w = _width / 4;
 				_viewport.h = _height / 4;
 				break;
+			case VIEWPORT_INVENTORY:
+				_viewport.x = 0;
+				_viewport.y = _height - (3 * TILE_RENDER_SIZE / 2);
+				_viewport.w = _width;
+				_viewport.h = _height;
 		}
 
 		SDL_RenderSetViewport(_renderer, &_viewport);
@@ -142,8 +147,8 @@ namespace AE
 		{
 			SDL_Rect renderQuad = { camera == nullptr ? x : x - camera->GetPosX(),
 									camera == nullptr ? y : y - camera->GetPosY(),
-									texture->GetRenderClip()->w * resize * (TILE_RENDER_FACTOR / RESIZE_FULL),
-									texture->GetRenderClip()->h * resize * (TILE_RENDER_FACTOR / RESIZE_FULL)};
+									resize == RESIZE_NONE ? texture->GetRenderClip()->w : texture->GetRenderClip()->w * resize * (TILE_RENDER_FACTOR / RESIZE_FULL),
+									resize == RESIZE_NONE ? texture->GetRenderClip()->h : texture->GetRenderClip()->h * resize * (TILE_RENDER_FACTOR / RESIZE_FULL)};
 
 			SDL_RenderCopyEx(_renderer, texture->GetTexture(), texture->GetRenderClip(), &renderQuad, angle, center, flip);
 		}

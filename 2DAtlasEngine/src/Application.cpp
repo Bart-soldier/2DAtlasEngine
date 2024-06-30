@@ -4,33 +4,7 @@ namespace AE
 {
 	void Application::Run()
 	{
-		InitUtils();
-
-		InitBuildMode();
-
-		_inventoryTexture = _graphicEngine.CreateSpriteTexture("rsc/images/ui/Inventory.png", 1, 2);
-
-		Ground* testGround = new Ground(_graphicEngine.CreateRegularTexture("rsc/images/environments/TestGround.png"));
-		_currentScene = new Scene(30, 30, "Main Scene", testGround);
-
-		minimap = _graphicEngine.CreateRegularTexture("rsc/minimap.png");
-		minimap->SetBlendMode();
-		minimap->SetAlpha(192);
-
-		SpriteTexture* characterTexture = _graphicEngine.CreateSpriteTexture("rsc/images/characters/DrJonez.png", 4, 4);
-		characterTexture->SetColumnIndex(0);
-		_player = new Character(characterTexture, 240, 190, 6 * TILE_RENDER_SIZE);
-		_player->SetBoundingBox(2 * TILE_RENDER_FACTOR, 4 * TILE_RENDER_FACTOR, TILE_RENDER_SIZE - 4 * TILE_RENDER_FACTOR, TILE_RENDER_SIZE * 2 - 4 * TILE_RENDER_FACTOR);
-		_controlledCharacter = _player;
-
-		_editor = new Character(NULL, 240, 190, 6 * TILE_RENDER_SIZE);
-
-		_camera.FocusOn(_controlledCharacter);
-		_camera.Bind(_currentScene->_width * TILE_RENDER_SIZE, _currentScene->_height * TILE_RENDER_SIZE);
-
-		_currentScene->AddCharacter(_player);
-
-		_editObject = new Ground(_graphicEngine.CreateRegularTexture("rsc/images/environments/Sand.png"));
+		Init();
 
 		while (!_graphicEngine._shouldClose)
 		{
@@ -39,8 +13,8 @@ namespace AE
 			HandleEvents();
 
 			CalculatePhysics();
-
 			_camera.Update();
+
 			RenderCurrentScene();
 			RenderCurrentCharacters();
 			RenderUI();
@@ -52,24 +26,64 @@ namespace AE
 	void Application::Shutdown()
 	{
 		TTF_CloseFont(_font);
-		_font = NULL;
+		_font = nullptr;
+
+		delete _player;
+		_player = nullptr;
+		delete _builder;
+		_builder = nullptr;
+		_controlledCharacter = nullptr;
+
+		delete _minimap;
+		_minimap = nullptr;
+		delete _fpsCounterTexture;
+		_fpsCounterTexture = nullptr;
+
+		for (int i = 0; i < _buildInventory.GetCapacity(); i++) {
+			if (_buildInventory.GetAt(i) != nullptr) {
+				delete _buildInventory.GetAt(i);
+				_buildInventory.AddAt(nullptr, i);
+			}
+		}
+		_buildObject = nullptr;
 	}
 
-	void Application::InitUtils()
+	void Application::Init()
 	{
+		/* --- Utils --- */
 		_font = TTF_OpenFont("rsc/fonts/lazy.ttf", 28);
 		if (_font == NULL)
 			printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
 
-		_globalTimer.Start();
-		_fpsTimer.Start();
-	}
+		/* --- Scenes --- */
+		Ground* basicGround = new Ground(_graphicEngine.CreateRegularTexture("rsc/images/environments/BasicGround.png"));
+		_sceneManager.AddScene(new Scene(30, 30, "Main Scene", basicGround));
+		_sceneManager.SetCurrentSceneIndex(0);
 
-	void Application::InitBuildMode()
-	{
+		/* --- Players --- */
+		_player = new Character(_graphicEngine.CreateSpriteTexture("rsc/images/characters/DrJonez.png", 4, 4), 240, 190, 6 * TILE_RENDER_SIZE);
+		_player->SetBoundingBox(2 * TILE_RENDER_FACTOR, 4 * TILE_RENDER_FACTOR, TILE_RENDER_SIZE - 4 * TILE_RENDER_FACTOR, TILE_RENDER_SIZE * 2 - 4 * TILE_RENDER_FACTOR);
+		_controlledCharacter = _player;
+		_sceneManager.GetCurrentScene()->AddCharacter(_player);
+
+		_builder = new Character(NULL, _player->GetXInPixel(), _player->GetYInPixel(), _player->GetSpeed());
+
+		/* --- Camera --- */
+		_camera.FocusOn(_controlledCharacter);
+		_camera.Bind(_sceneManager.GetCurrentScene()->_width * TILE_RENDER_SIZE, _sceneManager.GetCurrentScene()->_height * TILE_RENDER_SIZE);
+
+		/* --- UI --- */
+		_minimap = _graphicEngine.CreateRegularTexture("rsc/images/ui/Minimap.png");
+		_minimap->SetBlendMode();
+		_minimap->SetAlpha(192);
+
+		/* --- Build Mode --- */
 		_buildInventory.Add(new Ground(_graphicEngine.CreateRegularTexture("rsc/images/environments/Grass.png")));
 		_buildInventory.Add(new Ground(_graphicEngine.CreateRegularTexture("rsc/images/environments/Sand.png")));
 		_buildInventory.Add(new Ground(_graphicEngine.CreateRegularTexture("rsc/images/environments/Floor.png")));
+		_buildObject = new Ground(_buildInventory.GetAtCurrentIndex()->GetTexture());
+
+		_fpsTimer.Start();
 	}
 
 	void Application::SwitchGameMode()
@@ -78,9 +92,9 @@ namespace AE
 		{
 			case GAMEMODE_PLAY:
 				_gameMode = GAMEMODE_BUILD;
-				_editor->SetXInPixel(_camera.GetCenterX());
-				_editor->SetYInPixel(_camera.GetCenterY());
-				_controlledCharacter = _editor;
+				_builder->SetXInPixel(_camera.GetCenterX());
+				_builder->SetYInPixel(_camera.GetCenterY());
+				_controlledCharacter = _builder;
 				_camera.UnBind();
 				_hideUI = true;
 				_currentInventory = &_buildInventory;
@@ -88,7 +102,7 @@ namespace AE
 			case GAMEMODE_BUILD:
 				_gameMode = GAMEMODE_PLAY;
 				_controlledCharacter = _player;
-				_camera.Bind(_currentScene->_width * TILE_RENDER_SIZE, _currentScene->_height * TILE_RENDER_SIZE);
+				_camera.Bind(_sceneManager.GetCurrentScene()->_width * TILE_RENDER_SIZE, _sceneManager.GetCurrentScene()->_height * TILE_RENDER_SIZE);
 				_hideUI = false;
 				_currentInventory = &_playInventory;
 				break;
@@ -101,7 +115,7 @@ namespace AE
 	{
 		_fpsCapTimer.Start();
 		_graphicEngine.ClearRenderer();
-		_graphicEngine.SetViewport(GraphicsEngine::Viewport::FULLSCREEN);
+		_graphicEngine.SetViewport(GraphicsEngine::VIEWPORT_FULLSCREEN);
 	}
 
 	void Application::EndFrame()
@@ -115,41 +129,41 @@ namespace AE
 	{
 		switch (_gameMode) {
 			case GAMEMODE_PLAY:
-				_physicsEngine.MoveCharacters(_currentScene);
+				_physicsEngine.MoveCharacters(_sceneManager.GetCurrentScene());
 				break;
 			case GAMEMODE_BUILD:
-				_physicsEngine.MoveCharacter(_controlledCharacter, _currentScene);
+				_physicsEngine.MoveCharacter(_controlledCharacter, _sceneManager.GetCurrentScene());
 				break;
 		}
 
-		_physicsEngine._deltaTime.Start();
+		_physicsEngine.StartDeltaTime();
 	}
 
 	void Application::RenderCurrentScene()
 	{
-		for (int y = 0; y < _currentScene->_height; y++)
+		for (int y = 0; y < _sceneManager.GetCurrentScene()->_height; y++)
 		{
-			for (int x = 0; x < _currentScene->_width; x++)
+			for (int x = 0; x < _sceneManager.GetCurrentScene()->_width; x++)
 			{
-				GameObject* gameObject = _currentScene->GetBackgroundInGrid(x, y);
+				GameObject* gameObject = _sceneManager.GetCurrentScene()->GetBackgroundInGrid(x, y);
 				if (gameObject != nullptr)
 					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * TILE_RENDER_SIZE, y * TILE_RENDER_SIZE, &_camera);
 
-				gameObject = _currentScene->GetForegroundInGrid(x, y);
+				gameObject = _sceneManager.GetCurrentScene()->GetForegroundInGrid(x, y);
 				if (gameObject != nullptr)
 					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * TILE_RENDER_SIZE, y * TILE_RENDER_SIZE, &_camera);
 			}
 		}
 
 		if (_gameMode == GAMEMODE_BUILD)
-			_graphicEngine.RenderTexture(_editObject->GetTexture(), _editObject->GetXInGrid() * TILE_RENDER_SIZE, _editObject->GetYInGrid() * TILE_RENDER_SIZE, &_camera);
+			_graphicEngine.RenderTexture(_buildObject->GetTexture(), _buildObject->GetXInGrid() * TILE_RENDER_SIZE, _buildObject->GetYInGrid() * TILE_RENDER_SIZE, &_camera);
 	}
 
 	void Application::RenderCurrentCharacters()
 	{
 		if (_gameMode == GAMEMODE_PLAY)
 		{
-			for (Character* character : _currentScene->GetCharacters())
+			for (Character* character : _sceneManager.GetCurrentScene()->GetCharacters())
 			{
 				_graphicEngine.RenderTexture(character->GetTexture(), character->GetXInPixel(), character->GetYInPixel(), &_camera);
 			}
@@ -159,29 +173,28 @@ namespace AE
 	void Application::RenderUI()
 	{
 		if (!_hideUI) {
-			timeText.str("");
-			timeText << "FPS: " << GetFPS();
-			text = _graphicEngine.CreateTextTexture(_font, timeText.str().c_str(), { 0, 0, 0 });
+			_fpsCounterText.str("");
+			_fpsCounterText << "FPS: " << GetFPS();
+			delete _fpsCounterTexture;
+			_fpsCounterTexture = _graphicEngine.CreateTextTexture(_font, _fpsCounterText.str().c_str(), { 0, 0, 0 });
 
-			_graphicEngine.RenderTexture(text, 0, 0, nullptr, GraphicsEngine::RESIZE_NONE);
-			_graphicEngine.SetViewport(GraphicsEngine::MINIMAP);
-			_graphicEngine.RenderTextureFullViewport(minimap);
+			_graphicEngine.SetViewport(GraphicsEngine::VIEWPORT_FULLSCREEN);
+			_graphicEngine.RenderTexture(_fpsCounterTexture, 0, 0, nullptr, GraphicsEngine::RESIZE_NONE);
+			_graphicEngine.SetViewport(GraphicsEngine::VIEWPORT_MINIMAP);
+			_graphicEngine.RenderTextureFullViewport(_minimap);
 		}
 
-		_graphicEngine.SetViewport(GraphicsEngine::FULLSCREEN);
+		_graphicEngine.SetViewport(GraphicsEngine::VIEWPORT_INVENTORY);
 		int drawStart = (WIDTH / 2) - (_currentInventory->GetCapacity() / 2) * TILE_RENDER_SIZE;
 		for (int i = 0; i < _currentInventory->GetCapacity(); i++)
 		{
-			if (i == _currentInventory->GetCurrentIndex()) {
-				_inventoryTexture->SetColumnIndex(1);
-			}
-			else _inventoryTexture->SetColumnIndex(0);
+			_currentInventory->GetTexture()->SetColumnIndex(i == _currentInventory->GetCurrentIndex());
 
-			_graphicEngine.RenderTexture(_inventoryTexture, drawStart, HEIGHT - (3 * TILE_RENDER_SIZE / 2), nullptr);
+			_graphicEngine.RenderTexture(_currentInventory->GetTexture(), drawStart, 0, nullptr);
 			if(_currentInventory->GetAt(i) != nullptr)
 				_graphicEngine.RenderTexture(_currentInventory->GetAt(i)->GetTexture(),
 											 drawStart + TILE_RENDER_SIZE / 8,
-											 HEIGHT - (3 * TILE_RENDER_SIZE / 2) + TILE_RENDER_SIZE / 8,
+											 TILE_RENDER_SIZE / 8,
 											 nullptr,
 											 GraphicsEngine::RESIZE_THREEQUARTERS);
 			drawStart += TILE_RENDER_SIZE;
@@ -238,10 +251,9 @@ namespace AE
 	{
 		if (_gameMode == GAMEMODE_BUILD)
 		{
-			_editObject->SetXInPixel(_camera.GetPosX() + x);
-			_editObject->SetYInPixel(_camera.GetPosY() + y);
+			_buildObject->SetXInPixel(_camera.GetPosX() + x);
+			_buildObject->SetYInPixel(_camera.GetPosY() + y);
 		}
-			//_currentScene->SetForegroundInPixel(_camera.GetPosX() + x, _camera.GetPosY() + y, _overlay);
 	}
 
 	void Application::HandleMouseWheel(SDL_Event event)
@@ -252,7 +264,7 @@ namespace AE
 		if (_gameMode == GAMEMODE_BUILD)
 		{
 			if (_currentInventory->GetAtCurrentIndex() != nullptr)
-				_editObject->SetTexture(_currentInventory->GetAtCurrentIndex()->GetTexture());
+				_buildObject->SetTexture(_currentInventory->GetAtCurrentIndex()->GetTexture());
 		}
 	}
 
@@ -261,9 +273,8 @@ namespace AE
 		switch (_gameMode)
 		{
 			case GAMEMODE_BUILD:
-				_currentScene->SetBackgroundInGrid(_editObject->GetXInGrid(),
-												   _editObject->GetYInGrid(),
-												   new Ground(_editObject->GetTexture()));
+				_sceneManager.GetCurrentScene()->SetBackgroundInGrid(_buildObject->GetXInGrid(),_buildObject->GetYInGrid(),
+																	 _currentInventory->GetAtCurrentIndex());
 		}
 	}
 

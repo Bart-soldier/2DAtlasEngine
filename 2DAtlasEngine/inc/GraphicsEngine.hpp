@@ -20,9 +20,10 @@ namespace AE
 		/// <summary>The different viewport positions.</summary>
 		enum Viewport
 		{
-			FULLSCREEN,
-			MINIMAP,
-			TOTAL
+			VIEWPORT_FULLSCREEN,
+			VIEWPORT_MINIMAP,
+			VIEWPORT_INVENTORY,
+			VIEWPORT_TOTAL
 		};
 
 		/// <summary>The different texture resize options.</summary>
