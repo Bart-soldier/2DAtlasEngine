@@ -28,6 +28,8 @@ namespace AE
 		void SetLineIndex(int lineIndex);
 		/// <summary>Specifies which column of the sprite to look at when rendering.</summary>
 		void SetColumnIndex(int columnIndex);
+		/// <summary>Increments the column of the sprite to look at when rendering.</summary>
+		void IncrementColumnIndex();
 
 	private:
 		/// <summary>The number of lines within the sprite.</summary>

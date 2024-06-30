@@ -21,10 +21,10 @@ namespace AE
 
 	void Texture::Reset()
 	{
-		if (_texture != NULL)
+		if (_texture != nullptr)
 			SDL_DestroyTexture(_texture);
 
-		_texture = NULL;
+		_texture = nullptr;
 		_width = 0;
 		_height = 0;
 		_renderClip = { 0, 0, 0, 0 };

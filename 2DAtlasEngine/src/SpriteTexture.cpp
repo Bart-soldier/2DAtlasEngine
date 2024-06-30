@@ -40,6 +40,11 @@ namespace AE
 		UpdateRenderClip();
 	}
 
+	void SpriteTexture::IncrementColumnIndex()
+	{
+		++_columnIndex %= _columnNb;
+	}
+
 	void SpriteTexture::UpdateRenderClip()
 	{
 		_renderClip = { _columnIndex * _elementWidth, _lineIndex * _elementHeight, _elementWidth, _elementHeight };

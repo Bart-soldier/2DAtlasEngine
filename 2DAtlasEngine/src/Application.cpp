@@ -282,10 +282,10 @@ namespace AE
 	{
 		switch (keyCode)
 		{
-			case SDLK_UP: case SDLK_z: _controlledCharacter->StartMoving(UP); break;
-			case SDLK_DOWN: case SDLK_s: _controlledCharacter->StartMoving(DOWN); break;
-			case SDLK_LEFT: case SDLK_q: _controlledCharacter->StartMoving(LEFT); break;
-			case SDLK_RIGHT: case SDLK_d: _controlledCharacter->StartMoving(RIGHT); break;
+			case SDLK_UP: case SDLK_z: _controlledCharacter->StartMoving(DIRECTION_UP); break;
+			case SDLK_DOWN: case SDLK_s: _controlledCharacter->StartMoving(DIRECTION_DOWN); break;
+			case SDLK_LEFT: case SDLK_q: _controlledCharacter->StartMoving(DIRECTION_LEFT); break;
+			case SDLK_RIGHT: case SDLK_d: _controlledCharacter->StartMoving(DIRECTION_RIGHT); break;
 			case SDLK_TAB: SwitchGameMode(); break;
 			case SDLK_ESCAPE: _graphicEngine._shouldClose = true; break;
 		}
@@ -295,10 +295,10 @@ namespace AE
 	{
 		switch (keyCode)
 		{
-			case SDLK_UP: case SDLK_z: _controlledCharacter->StopMoving(UP); break;
-			case SDLK_DOWN: case SDLK_s: _controlledCharacter->StopMoving(DOWN); break;
-			case SDLK_LEFT: case SDLK_q: _controlledCharacter->StopMoving(LEFT); break;
-			case SDLK_RIGHT: case SDLK_d: _controlledCharacter->StopMoving(RIGHT); break;
+			case SDLK_UP: case SDLK_z: _controlledCharacter->StopMoving(DIRECTION_UP); break;
+			case SDLK_DOWN: case SDLK_s: _controlledCharacter->StopMoving(DIRECTION_DOWN); break;
+			case SDLK_LEFT: case SDLK_q: _controlledCharacter->StopMoving(DIRECTION_LEFT); break;
+			case SDLK_RIGHT: case SDLK_d: _controlledCharacter->StopMoving(DIRECTION_RIGHT); break;
 		}
 	}
 }

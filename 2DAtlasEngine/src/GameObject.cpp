@@ -64,13 +64,13 @@ namespace AE
 	int GameObject::GetXInGrid()
 	{
 		int x = static_cast<int>(_posX);
-		return x / TILE_RENDER_SIZE;
+		return x < 0 ? (x / TILE_RENDER_SIZE) - 1 : x / TILE_RENDER_SIZE;
 	}
 
 	int GameObject::GetYInGrid()
 	{
 		int y = static_cast<int>(_posY);
-		return y / TILE_RENDER_SIZE;
+		return y < 0 ? (y / TILE_RENDER_SIZE) - 1 : y / TILE_RENDER_SIZE;
 	}
 
 	int GameObject::GetWidth()

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../inc/GameObject.hpp"
+#include "../inc/Timer.hpp"
 
 namespace AE
 {
@@ -12,7 +13,7 @@ namespace AE
 		/// <param name='x'>The character's initial x position.</param>
 		/// <param name='y'>The character's initial y position.</param>
 		/// <param name='speed'>The character's speed, in pixel per seconds.</param>
-		Character(Texture* texture, int x, int y, int speed);
+		Character(SpriteTexture* texture, int x, int y, int speed);
 		~Character();
 
 		/// <summary>The x coordinate the character desires to move to.</summary>
@@ -48,5 +49,10 @@ namespace AE
 		int _speedX;
 		/// <summary>The current speed on the y axis.</summary>
 		int _speedY;
+
+		/// <summary>The timer used to animate the sprite.</summary>
+		Timer _spriteTimer{};
+		/// <summary>Used to keep track which direction the character is facing.</summary>
+		Direction _currentDirection = DIRECTION_TOTAL;
 	};
 }

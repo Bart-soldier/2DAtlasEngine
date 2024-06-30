@@ -23,10 +23,10 @@ namespace AE
 	/// <summary>The various mouvement directions.</summary>
 	enum Direction
 	{
-		UP,
-		DOWN,
-		LEFT,
-		RIGHT,
+		DIRECTION_UP,
+		DIRECTION_DOWN,
+		DIRECTION_LEFT,
+		DIRECTION_RIGHT,
 		DIRECTION_TOTAL
 	};
 

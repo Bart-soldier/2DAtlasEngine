@@ -22,6 +22,8 @@ namespace AE
 		void SetYInPixel(int y);
 		void SetTexture(Texture* texture);
 
+		/// <summary>Gets the game object's texture.</summary>
+		/// <returns>The game object's <see cref="Texture"/>.</returns>
 		Texture* GetTexture();
 		int GetXInPixel();
 		int GetYInPixel();
@@ -32,6 +34,8 @@ namespace AE
 		SDL_Rect GetBoundingBox();
 
 	protected:
+		/// <summary>The game object's texture.</summary>
+		Texture* _texture;
 		/// <summary>The game object's x coordinate.</summary>
 		float _posX;
 		/// <summary>The game object's x coordinate.</summary>
@@ -46,9 +50,6 @@ namespace AE
 		SDL_Rect _boundingBox;
 
 	private:
-		/// <summary>The game object's texture.</summary>
-		Texture* _texture;
-
 		void SetDimensions();
 	};
 }
