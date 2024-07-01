@@ -82,7 +82,7 @@ namespace AE
 			void ManuallyCapFPS();
 
 			void HandleEvents();
-			void HandleMouseMotion(int x, int y);
+			void HandleMouseMotion();
 			void HandleMouseWheel(SDL_Event event);
 			void HandleMouseButtonDown();
 			void HandleKeyDownEvent(SDL_Keycode keyCode);

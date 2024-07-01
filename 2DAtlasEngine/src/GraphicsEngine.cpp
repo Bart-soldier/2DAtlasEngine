@@ -141,14 +141,24 @@ namespace AE
 		return new TextTexture(_renderer, font, text, color);
 	}
 
-	void GraphicsEngine::RenderTexture(Texture* texture, int x, int y, Camera* camera, Resize resize, double angle, SDL_Point* center, SDL_RendererFlip flip)
+	void GraphicsEngine::RenderTexture(Texture* texture, int x, int y, Camera* camera, Resize resize, bool toTileRenderSize, double angle, SDL_Point* center, SDL_RendererFlip flip)
 	{
 		if (texture != NULL)
 		{
+			float resizeFactor = texture->GetRenderClip()->w < texture->GetRenderClip()->h ? texture->GetRenderClip()->h : texture->GetRenderClip()->w;
+			resizeFactor /= TILE_SIZE;
+
+			int width = toTileRenderSize ? texture->GetRenderClip()->w / resizeFactor : texture->GetRenderClip()->w;
+			int height = toTileRenderSize ? texture->GetRenderClip()->h / resizeFactor : texture->GetRenderClip()->h;
+			width = resize == RESIZE_NONE ? width : width * resize * (TILE_RENDER_FACTOR / RESIZE_FULL);
+			height = resize == RESIZE_NONE ? height : height * resize * (TILE_RENDER_FACTOR / RESIZE_FULL);
+			x += toTileRenderSize ? (TILE_RENDER_SIZE - width) / 2 : 0;
+			y += toTileRenderSize ? (TILE_RENDER_SIZE - height) / 2 : 0;
+
 			SDL_Rect renderQuad = { camera == nullptr ? x : x - camera->GetPosX(),
 									camera == nullptr ? y : y - camera->GetPosY(),
-									resize == RESIZE_NONE ? texture->GetRenderClip()->w : texture->GetRenderClip()->w * resize * (TILE_RENDER_FACTOR / RESIZE_FULL),
-									resize == RESIZE_NONE ? texture->GetRenderClip()->h : texture->GetRenderClip()->h * resize * (TILE_RENDER_FACTOR / RESIZE_FULL)};
+									width,
+									height};
 
 			SDL_RenderCopyEx(_renderer, texture->GetTexture(), texture->GetRenderClip(), &renderQuad, angle, center, flip);
 		}

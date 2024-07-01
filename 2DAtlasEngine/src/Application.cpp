@@ -56,8 +56,7 @@ namespace AE
 			printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
 
 		/* --- Scenes --- */
-		Ground* basicGround = new Ground(_graphicEngine.CreateRegularTexture("rsc/images/environments/BasicGround.png"));
-		_sceneManager.AddScene(new Scene(30, 30, "Main Scene", basicGround));
+		_sceneManager.AddScene(new Scene(30, 30, "Main Scene", _graphicEngine.CreateRegularTexture("rsc/images/environments/BasicGround.png")));
 		_sceneManager.SetCurrentSceneIndex(0);
 
 		/* --- Players --- */
@@ -78,10 +77,23 @@ namespace AE
 		_minimap->SetAlpha(192);
 
 		/* --- Build Mode --- */
-		_buildInventory.Add(new Ground(_graphicEngine.CreateRegularTexture("rsc/images/environments/Grass.png")));
-		_buildInventory.Add(new Ground(_graphicEngine.CreateRegularTexture("rsc/images/environments/Sand.png")));
-		_buildInventory.Add(new Ground(_graphicEngine.CreateRegularTexture("rsc/images/environments/Floor.png")));
-		_buildObject = new Ground(_buildInventory.GetAtCurrentIndex()->GetTexture());
+		_buildInventory.Add(new GameObject(_graphicEngine.CreateRegularTexture("rsc/images/environments/Grass.png")));
+		_buildInventory.Add(new GameObject(_graphicEngine.CreateRegularTexture("rsc/images/environments/Sand.png")));
+		_buildInventory.Add(new GameObject(_graphicEngine.CreateRegularTexture("rsc/images/environments/Floor.png")));
+		_buildInventory.Add(new GameObject(_graphicEngine.CreateRegularTexture("rsc/images/objects/Box.png")));
+
+		GameObject* bigBox = new GameObject(_graphicEngine.CreateRegularTexture("rsc/images/objects/BigBox.png"));
+		bigBox->SetBoundingBox(0, TILE_RENDER_SIZE, bigBox->GetWidth(), TILE_RENDER_SIZE);
+		_buildInventory.Add(bigBox);
+
+		GameObject* reallyBigBox = new GameObject(_graphicEngine.CreateRegularTexture("rsc/images/objects/ReallyBigBox.png"));
+		reallyBigBox->SetBoundingBox(0, TILE_RENDER_SIZE * 2, bigBox->GetWidth(), TILE_RENDER_SIZE);
+		_buildInventory.Add(reallyBigBox);
+
+		GameObject* wideBox = new GameObject(_graphicEngine.CreateRegularTexture("rsc/images/objects/WideBox.png"));
+		_buildInventory.Add(wideBox);
+
+		_buildObject = new GameObject(_buildInventory.GetAtCurrentIndex()->GetTexture());
 
 		_fpsTimer.Start();
 	}
@@ -98,6 +110,7 @@ namespace AE
 				_camera.UnBind();
 				_hideUI = true;
 				_currentInventory = &_buildInventory;
+				HandleMouseMotion();
 				break;
 			case GAMEMODE_BUILD:
 				_gameMode = GAMEMODE_PLAY;
@@ -147,16 +160,16 @@ namespace AE
 			{
 				GameObject* gameObject = _sceneManager.GetCurrentScene()->GetBackgroundInGrid(x, y);
 				if (gameObject != nullptr)
-					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * TILE_RENDER_SIZE, y * TILE_RENDER_SIZE, &_camera);
+					_graphicEngine.RenderTexture(gameObject->GetTexture(), gameObject->GetRenderXInPixel(), gameObject->GetRenderYInPixel(), &_camera);
 
 				gameObject = _sceneManager.GetCurrentScene()->GetForegroundInGrid(x, y);
 				if (gameObject != nullptr)
-					_graphicEngine.RenderTexture(gameObject->GetTexture(), x * TILE_RENDER_SIZE, y * TILE_RENDER_SIZE, &_camera);
+					_graphicEngine.RenderTexture(gameObject->GetTexture(), gameObject->GetRenderXInPixel(), gameObject->GetRenderYInPixel(), &_camera);
 			}
 		}
 
-		if (_gameMode == GAMEMODE_BUILD)
-			_graphicEngine.RenderTexture(_buildObject->GetTexture(), _buildObject->GetXInGrid() * TILE_RENDER_SIZE, _buildObject->GetYInGrid() * TILE_RENDER_SIZE, &_camera);
+		if (_gameMode == GAMEMODE_BUILD && _buildObject != nullptr)
+			_graphicEngine.RenderTexture(_buildObject->GetTexture(), _buildObject->GetRenderXInGrid() * TILE_RENDER_SIZE, _buildObject->GetRenderYInGrid() * TILE_RENDER_SIZE, &_camera);
 	}
 
 	void Application::RenderCurrentCharacters()
@@ -192,11 +205,7 @@ namespace AE
 
 			_graphicEngine.RenderTexture(_currentInventory->GetTexture(), drawStart, 0, nullptr);
 			if(_currentInventory->GetAt(i) != nullptr)
-				_graphicEngine.RenderTexture(_currentInventory->GetAt(i)->GetTexture(),
-											 drawStart + TILE_RENDER_SIZE / 8,
-											 TILE_RENDER_SIZE / 8,
-											 nullptr,
-											 GraphicsEngine::RESIZE_THREEQUARTERS);
+				_graphicEngine.RenderTexture(_currentInventory->GetAt(i)->GetTexture(), drawStart, 0, nullptr, GraphicsEngine::RESIZE_THREEQUARTERS, true);
 			drawStart += TILE_RENDER_SIZE;
 		}
 	}
@@ -227,9 +236,7 @@ namespace AE
 				_graphicEngine._shouldClose = true;
 				return;
 			case SDL_MOUSEMOTION:
-				int x, y;
-				SDL_GetMouseState(&x, &y);
-				HandleMouseMotion(x, y);
+				HandleMouseMotion();
 				break;
 			case SDL_MOUSEBUTTONDOWN:
 				HandleMouseButtonDown();
@@ -247,10 +254,12 @@ namespace AE
 		}
 	}
 
-	void Application::HandleMouseMotion(int x, int y)
+	void Application::HandleMouseMotion()
 	{
-		if (_gameMode == GAMEMODE_BUILD)
+		if (_gameMode == GAMEMODE_BUILD && _buildObject != nullptr)
 		{
+			int x, y;
+			SDL_GetMouseState(&x, &y);
 			_buildObject->SetXInPixel(_camera.GetPosX() + x);
 			_buildObject->SetYInPixel(_camera.GetPosY() + y);
 		}
@@ -263,7 +272,8 @@ namespace AE
 
 		if (_gameMode == GAMEMODE_BUILD)
 		{
-			_buildObject->SetTexture(_currentInventory->GetAtCurrentIndex() != nullptr ? _currentInventory->GetAtCurrentIndex()->GetTexture() : nullptr);
+			_buildObject = _currentInventory->GetAtCurrentIndex();
+			HandleMouseMotion();
 		}
 	}
 
@@ -272,9 +282,9 @@ namespace AE
 		switch (_gameMode)
 		{
 			case GAMEMODE_BUILD:
-				if(_currentInventory->GetAtCurrentIndex() != nullptr)
+				if(_buildObject != nullptr)
 					_sceneManager.GetCurrentScene()->SetBackgroundInGrid(_buildObject->GetXInGrid(),_buildObject->GetYInGrid(),
-																		 _currentInventory->GetAtCurrentIndex());
+																		 new GameObject(*_buildObject));
 		}
 	}
 

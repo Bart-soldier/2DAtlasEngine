@@ -70,6 +70,28 @@ namespace AE
 		return y < 0 ? (y / TILE_RENDER_SIZE) - 1 : y / TILE_RENDER_SIZE;
 	}
 
+	int GameObject::GetRenderXInPixel()
+	{
+		return static_cast<int>(_posX) - _boundingBox.x;
+	}
+
+	int GameObject::GetRenderYInPixel()
+	{
+		return static_cast<int>(_posY) - _boundingBox.y;
+	}
+
+	int GameObject::GetRenderXInGrid()
+	{
+		int x = static_cast<int>(_posX) - _boundingBox.x;
+		return x < 0 ? (x / TILE_RENDER_SIZE) - 1 : x / TILE_RENDER_SIZE;
+	}
+
+	int GameObject::GetRenderYInGrid()
+	{
+		int y = static_cast<int>(_posY) - _boundingBox.y;
+		return y < 0 ? (y / TILE_RENDER_SIZE) - 1 : y / TILE_RENDER_SIZE;
+	}
+
 	int GameObject::GetWidth()
 	{
 		return _width;

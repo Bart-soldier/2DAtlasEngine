@@ -160,6 +160,18 @@
     <Image Include="rsc\images\ui\BuildInventory.png">
       <Filter>Fichiers de ressources</Filter>
     </Image>
+    <Image Include="rsc\images\objects\BigBox.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="rsc\images\objects\Box.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="rsc\images\objects\ReallyBigBox.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
+    <Image Include="rsc\images\objects\WideBox.png">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Font Include="rsc\fonts\lazy.ttf" />

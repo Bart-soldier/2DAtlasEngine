@@ -85,10 +85,11 @@ namespace AE
 		/// <param name='y'>The y position of the texture.</param>
 		/// <param name='Camera'>A pointer to the camera to render to.</param>
 		/// <param name='resize'>Should the texture be resized using the <see cref="TILE_RENDER_FACTOR"/>. Defined by enum <see cref="Resize"/>.</param>
+		/// <param name='toTileRenderSize'>A boolean to indicate if the render needs to fit a within a single tile.</param>
 		/// <param name='angle'>The angle used to rotate the texture.</param>
 		/// <param name='center'>The center of rotation used to rotate the texture.</param>
 		/// <param name='flip'>The type of <see cref="SDL_RendererFlip"/> to be applied to the texture.</param>
-		void RenderTexture(Texture* texture, int x = 0, int y = 0, Camera* camera = nullptr, Resize resize = RESIZE_FULL, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
+		void RenderTexture(Texture* texture, int x = 0, int y = 0, Camera* camera = nullptr, Resize resize = RESIZE_FULL, bool toTileRenderSize = false, double angle = 0.0, SDL_Point* center = NULL, SDL_RendererFlip flip = SDL_FLIP_NONE);
 		/// <summary>Add a texture to the renderer by enlarging it to fit the full viewport.</summary>
 		/// <param name='texture'>The texture to add.</param>
 		void RenderTextureFullViewport(Texture* texture);

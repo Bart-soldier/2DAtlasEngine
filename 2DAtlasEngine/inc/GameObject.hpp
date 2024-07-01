@@ -29,6 +29,10 @@ namespace AE
 		int GetYInPixel();
 		int GetXInGrid();
 		int GetYInGrid();
+		int GetRenderXInPixel();
+		int GetRenderYInPixel();
+		int GetRenderXInGrid();
+		int GetRenderYInGrid();
 		int GetWidth();
 		int GetHeight();
 		SDL_Rect GetBoundingBox();
@@ -36,9 +40,9 @@ namespace AE
 	protected:
 		/// <summary>The game object's texture.</summary>
 		Texture* _texture;
-		/// <summary>The game object's x coordinate.</summary>
+		/// <summary>The game object's x coordinate in pixels.</summary>
 		float _posX;
-		/// <summary>The game object's x coordinate.</summary>
+		/// <summary>The game object's y coordinate in pixels.</summary>
 		float _posY;
 		/// <summary>The game object's width.</summary>
 		int _width;

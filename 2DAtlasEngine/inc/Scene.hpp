@@ -16,8 +16,8 @@ namespace AE
 		/// <param name='width'>The width of the grid representing the scene.</param>
 		/// <param name='height'>The height of the grid representing the scene.</param>
 		/// <param name='name'>The name of the scene.</param>
-		/// <param name='background'>The game object to be applied to all of the scene element's background.</param>
-		Scene(int width, int height, std::string name, GameObject* background = nullptr);
+		/// <param name='texture'>A pointer to the <see cref="Texture"/> to be applied to all of the scene element's background.</param>
+		Scene(int width, int height, std::string name, Texture* texture = nullptr);
 		~Scene();
 
 		/// <summary>A scene represents a level as a grid.</summary>
