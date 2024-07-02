@@ -6,7 +6,7 @@
 #include "GraphicsEngine.hpp"
 #include "PhysicsEngine.hpp"
 #include "SceneManager.hpp"
-#include "Ground.hpp"
+#include "SceneObject.hpp"
 #include "Character.hpp"
 #include "Inventory.hpp"
 
@@ -64,7 +64,7 @@ namespace AE
 
 			/* --- Build Mode --- */
 			GameMode _gameMode = GAMEMODE_PLAY;
-			GameObject* _buildObject = nullptr;
+			SceneObject* _buildObject = nullptr;
 
 			void Init();
 

@@ -26,7 +26,7 @@
     <ClCompile Include="src\RegularTexture.cpp" />
     <ClCompile Include="src\SpriteTexture.cpp" />
     <ClCompile Include="src\Character.cpp" />
-    <ClCompile Include="src\Ground.cpp" />
+    <ClCompile Include="src\SceneObject.cpp" />
     <ClCompile Include="src\GameObject.cpp" />
     <ClCompile Include="src\Scene.cpp" />
     <ClCompile Include="src\Texture.cpp" />
@@ -37,11 +37,11 @@
     <ClCompile Include="src\TextTexture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="inc\SceneObject.hpp" />
     <ClInclude Include="inc\Camera.hpp" />
     <ClInclude Include="inc\Constants.hpp" />
     <ClInclude Include="inc\Character.hpp" />
     <ClInclude Include="inc\GameObject.hpp" />
-    <ClInclude Include="inc\Ground.hpp" />
     <ClInclude Include="inc\Scene.hpp" />
     <ClInclude Include="inc\Texture.hpp" />
     <ClInclude Include="inc\GraphicsEngine.hpp" />

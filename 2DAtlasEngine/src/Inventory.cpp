@@ -4,7 +4,7 @@ namespace AE
 {
 	Inventory::Inventory(SpriteTexture* texture, int capacity) : _texture{ texture }, _capacity { capacity }
 	{
-		_items = std::vector<GameObject*>(_capacity, nullptr);
+		_items = std::vector<SceneObject*>(_capacity, nullptr);
 		_spaceUsed = 0;
 		_currentIndex = 0;
 
@@ -30,7 +30,7 @@ namespace AE
 		_currentIndex = --_currentIndex < BeginCurrentRow() ? EndCurrentRow() - 1 : _currentIndex;
 	}
 
-	bool Inventory::AddAt(GameObject* item, int index)
+	bool Inventory::AddAt(SceneObject* item, int index)
 	{
 		if(index >= 0 && index < _capacity)
 		{
@@ -41,7 +41,7 @@ namespace AE
 		return false;
 	}
 
-	bool Inventory::Add(GameObject* item)
+	bool Inventory::Add(SceneObject* item)
 	{
 		if (_spaceUsed >= _capacity) return false;
 
@@ -76,12 +76,12 @@ namespace AE
 		return _currentIndex;
 	}
 
-	GameObject* Inventory::GetAt(int index)
+	SceneObject* Inventory::GetAt(int index)
 	{
 		return (index >= 0 && index < _capacity) ? _items.at(index) : nullptr;
 	}
 
-	GameObject* Inventory::GetAtCurrentIndex()
+	SceneObject* Inventory::GetAtCurrentIndex()
 	{
 		return (_currentIndex >= 0 && _currentIndex < _capacity) ? _items.at(_currentIndex) : nullptr;
 	}

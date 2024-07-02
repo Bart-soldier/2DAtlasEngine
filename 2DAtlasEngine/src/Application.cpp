@@ -77,23 +77,23 @@ namespace AE
 		_minimap->SetAlpha(192);
 
 		/* --- Build Mode --- */
-		_buildInventory.Add(new GameObject(_graphicEngine.CreateRegularTexture("rsc/images/environments/Grass.png")));
-		_buildInventory.Add(new GameObject(_graphicEngine.CreateRegularTexture("rsc/images/environments/Sand.png")));
-		_buildInventory.Add(new GameObject(_graphicEngine.CreateRegularTexture("rsc/images/environments/Floor.png")));
-		_buildInventory.Add(new GameObject(_graphicEngine.CreateRegularTexture("rsc/images/objects/Box.png")));
+		_buildInventory.Add(new SceneObject(_graphicEngine.CreateRegularTexture("rsc/images/environments/Grass.png"), SceneObject::TYPE_BACKGROUND));
+		_buildInventory.Add(new SceneObject(_graphicEngine.CreateRegularTexture("rsc/images/environments/Sand.png"), SceneObject::TYPE_BACKGROUND));
+		_buildInventory.Add(new SceneObject(_graphicEngine.CreateRegularTexture("rsc/images/environments/Floor.png"), SceneObject::TYPE_BACKGROUND));
+		_buildInventory.Add(new SceneObject(_graphicEngine.CreateRegularTexture("rsc/images/objects/Box.png"), SceneObject::TYPE_FOREGROUND));
 
-		GameObject* bigBox = new GameObject(_graphicEngine.CreateRegularTexture("rsc/images/objects/BigBox.png"));
+		SceneObject* bigBox = new SceneObject(_graphicEngine.CreateRegularTexture("rsc/images/objects/BigBox.png"), SceneObject::TYPE_FOREGROUND);
 		bigBox->SetBoundingBox(0, TILE_RENDER_SIZE, bigBox->GetWidth(), TILE_RENDER_SIZE);
 		_buildInventory.Add(bigBox);
 
-		GameObject* reallyBigBox = new GameObject(_graphicEngine.CreateRegularTexture("rsc/images/objects/ReallyBigBox.png"));
+		SceneObject* reallyBigBox = new SceneObject(_graphicEngine.CreateRegularTexture("rsc/images/objects/ReallyBigBox.png"), SceneObject::TYPE_FOREGROUND);
 		reallyBigBox->SetBoundingBox(0, TILE_RENDER_SIZE * 2, bigBox->GetWidth(), TILE_RENDER_SIZE);
 		_buildInventory.Add(reallyBigBox);
 
-		GameObject* wideBox = new GameObject(_graphicEngine.CreateRegularTexture("rsc/images/objects/WideBox.png"));
+		SceneObject* wideBox = new SceneObject(_graphicEngine.CreateRegularTexture("rsc/images/objects/WideBox.png"), SceneObject::TYPE_FOREGROUND);
 		_buildInventory.Add(wideBox);
 
-		_buildObject = new GameObject(_buildInventory.GetAtCurrentIndex()->GetTexture());
+		_buildObject = _buildInventory.GetAtCurrentIndex();
 
 		_fpsTimer.Start();
 	}
@@ -283,8 +283,8 @@ namespace AE
 		{
 			case GAMEMODE_BUILD:
 				if(_buildObject != nullptr)
-					_sceneManager.GetCurrentScene()->SetBackgroundInGrid(_buildObject->GetXInGrid(),_buildObject->GetYInGrid(),
-																		 new GameObject(*_buildObject));
+					_sceneManager.GetCurrentScene()->SetInGrid(_buildObject->GetXInGrid(),_buildObject->GetYInGrid(),
+																		 new SceneObject(*_buildObject));
 		}
 	}
 
