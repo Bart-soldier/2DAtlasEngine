@@ -67,6 +67,22 @@ namespace AE
 		/// <summary>Removes a character to the scene.</summary>
 		/// <param name='character'>A pointer to the character to remove.</param>
 		void RemoveCharacter(Character* character);
+		/// <summary>Removes the background of an element in the scene using grid coordinates.</summary>
+		/// <param name='x'>The x coordinate within the grid.</param>
+		/// <param name='y'>The y coordinate within the grid.</param>
+		void RemoveBackgroundInGrid(int x, int y);
+		/// <summary>Removes the foreground of an element in the scene using grid coordinates.</summary>
+		/// <param name='x'>The x coordinate within the grid.</param>
+		/// <param name='y'>The y coordinate within the grid.</param>
+		void RemoveForegroundInGrid(int x, int y);
+		/// <summary>Removes the background of an element in the scene using pixel coordinates.</summary>
+		/// <param name='x'>The x coordinate in pixel-space.</param>
+		/// <param name='y'>The y coordinate in pixel-space.</param>
+		void RemoveBackgroundInPixel(int x, int y);
+		/// <summary>Removes the foreground of an element in the scene using pixel coordinates.</summary>
+		/// <param name='x'>The x coordinate in pixel-space.</param>
+		/// <param name='y'>The y coordinate in pixel-space.</param>
+		void RemoveForegroundInPixel(int x, int y);
 
 	private:
 		/// <summary>A vector representing the scene as a grid, where every element in the grid has a background and a foreground <see cref="GameObject"/>.</summary>

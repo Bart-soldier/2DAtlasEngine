@@ -56,6 +56,8 @@ namespace AE
 
 	void Scene::SetInGrid(int x, int y, SceneObject* sceneObject)
 	{
+		if (sceneObject == nullptr) return;
+
 		if (!(x < 0 || x >= _width || y < 0 || y >= _height))
 		{
 			sceneObject->SetXInPixel(x * TILE_RENDER_SIZE);
@@ -77,6 +79,8 @@ namespace AE
 
 	void Scene::SetInPixel(int x, int y, SceneObject* sceneObject)
 	{
+		if (sceneObject == nullptr) return;
+
 		int gridX = x / TILE_RENDER_SIZE;
 		int gridY = y / TILE_RENDER_SIZE;
 		if (!(gridX < 0 || gridX >= _width || gridY < 0 || gridY >= _height))
@@ -107,4 +111,31 @@ namespace AE
 		_characters.erase(std::remove(_characters.begin(), _characters.end(), character), _characters.end());
 	}
 
+	void Scene::RemoveBackgroundInGrid(int x, int y)
+	{
+		if (x < 0 || x >= _width || y < 0 || y >= _height)
+			_sceneElements.at(y * _width + x).first = nullptr;
+	}
+
+	void Scene::RemoveForegroundInGrid(int x, int y)
+	{
+		if (x < 0 || x >= _width || y < 0 || y >= _height)
+			_sceneElements.at(y * _width + x).second = nullptr;
+	}
+
+	void Scene::RemoveBackgroundInPixel(int x, int y)
+	{
+		int gridX = x / TILE_RENDER_SIZE;
+		int gridY = y / TILE_RENDER_SIZE;
+		if (gridX < 0 || gridX >= _width || gridY < 0 || gridY >= _height)
+			_sceneElements.at(gridY * _width + gridX).first = nullptr;
+	}
+
+	void Scene::RemoveForegroundInPixel(int x, int y)
+	{
+		int gridX = x / TILE_RENDER_SIZE;
+		int gridY = y / TILE_RENDER_SIZE;
+		if (gridX < 0 || gridX >= _width || gridY < 0 || gridY >= _height)
+			_sceneElements.at(gridY * _width + gridX).second = nullptr;
+	}
 }
